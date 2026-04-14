@@ -8,6 +8,12 @@
     
     <!-- Zone cliquable pour la blessure -->
     <button class="hotspot-blessure" onclick="showBlessure()"></button>
+    
+    <!-- Zone cliquable pour le tiroir -->
+    <button class="hotspot-tiroir" onclick="showTiroir()"></button>
+    
+    <!-- Zone cliquable pour le tapis -->
+    <button class="hotspot-tapis" onclick="showTapis()"></button>
 </div>
 
 <!-- Modal pour afficher l'image blessure -->
@@ -15,6 +21,22 @@
     <div class="modal-blessure-content">
         <button class="modal-blessure-close" onclick="closeBlessure()">×</button>
         <img src="/images/blessure.png" alt="Blessure" />
+    </div>
+</div>
+
+<!-- Modal pour afficher l'image tiroir -->
+<div id="tiroirModal" class="modal-tiroir hidden">
+    <div class="modal-tiroir-content">
+        <button class="modal-tiroir-close" onclick="closeTiroir()">×</button>
+        <img src="/images/scene de crime tiroir.png" alt="Tiroir" />
+    </div>
+</div>
+
+<!-- Modal pour afficher l'image tapis -->
+<div id="tapisModal" class="modal-tapis hidden">
+    <div class="modal-tapis-content">
+        <button class="modal-tapis-close" onclick="closeTapis()">×</button>
+        <img src="/images/scene de crime lettre.png" alt="Tapis" />
     </div>
 </div>
 
@@ -27,12 +49,43 @@
         document.getElementById('blessureModal').classList.add('hidden');
     }
     
-    // Fermer le modal en cliquant en dehors
+    function showTiroir() {
+        document.getElementById('tiroirModal').classList.remove('hidden');
+    }
+    
+    function closeTiroir() {
+        document.getElementById('tiroirModal').classList.add('hidden');
+    }
+    
+    function showTapis() {
+        document.getElementById('tapisModal').classList.remove('hidden');
+    }
+    
+    function closeTapis() {
+        document.getElementById('tapisModal').classList.add('hidden');
+    }
+    
+    // Fermer les modals en cliquant en dehors
     document.addEventListener('DOMContentLoaded', function() {
-        const modal = document.getElementById('blessureModal');
-        modal.addEventListener('click', function(e) {
-            if (e.target === modal) {
+        const blessureModal = document.getElementById('blessureModal');
+        const tiroirModal = document.getElementById('tiroirModal');
+        const tapisModal = document.getElementById('tapisModal');
+        
+        blessureModal.addEventListener('click', function(e) {
+            if (e.target === blessureModal) {
                 closeBlessure();
+            }
+        });
+        
+        tiroirModal.addEventListener('click', function(e) {
+            if (e.target === tiroirModal) {
+                closeTiroir();
+            }
+        });
+        
+        tapisModal.addEventListener('click', function(e) {
+            if (e.target === tapisModal) {
+                closeTapis();
             }
         });
     });
