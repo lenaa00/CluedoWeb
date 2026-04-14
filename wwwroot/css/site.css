@@ -429,10 +429,10 @@ body {
 /* Zone cliquable pour le tapis */
 .hotspot-tapis {
     position: absolute;
-    top: 60%;
-    left: 15%;
-    width: 18vw;
-    height: 20vh;
+    top: 90%;
+    left: 66%;
+    width: 10vw;
+    height: 10vh;
     transform: translateX(-50%);
     
     cursor: pointer;
