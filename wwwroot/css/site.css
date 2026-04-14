@@ -346,3 +346,79 @@ body {
 
     border-radius: 6px;
 }
+
+/* Zone cliquable pour la blessure */
+.hotspot-blessure {
+    position: absolute;
+    top: 50%;
+    left: 65%;
+    width: 20vw;
+    height: 15vh;
+    transform: translateX(-50%);
+    
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    
+    transition: all 0.3s ease;
+}
+
+.hotspot-blessure:hover {
+    background: rgba(255, 0, 0, 0.1);
+    border: 2px solid rgba(255, 0, 0, 0.3);
+    border-radius: 4px;
+}
+
+/* Modal pour afficher l'image blessure */
+.modal-blessure {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-blessure.hidden {
+    display: none;
+}
+
+.modal-blessure-content {
+    position: relative;
+    max-width: 90%;
+    max-height: 90vh;
+    overflow: auto;
+}
+
+.modal-blessure-content img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.modal-blessure-close {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    background: white;
+    border: none;
+    font-size: 32px;
+    cursor: pointer;
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.modal-blessure-close:hover {
+    background: rgba(255, 255, 255, 0.8);
+    transform: scale(1.1);
+}

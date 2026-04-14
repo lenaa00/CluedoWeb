@@ -5,7 +5,35 @@
         <p>Oh vous voilà enfin !</p>
         <p>Nous pouvons démarrer l'enquête, <br />la scène de crime est à vous... </p>
     </div>
-    <a href="/Salle1" class="hotspot-bouton3"></a>
-    <a href="/Regles" class="hotspot-bouton4"></a>
-    <a href="/Regles" class="hotspot-bouton5"></a>
+    
+    <!-- Zone cliquable pour la blessure -->
+    <button class="hotspot-blessure" onclick="showBlessure()"></button>
 </div>
+
+<!-- Modal pour afficher l'image blessure -->
+<div id="blessureModal" class="modal-blessure hidden">
+    <div class="modal-blessure-content">
+        <button class="modal-blessure-close" onclick="closeBlessure()">×</button>
+        <img src="/images/blessure.png" alt="Blessure" />
+    </div>
+</div>
+
+<script>
+    function showBlessure() {
+        document.getElementById('blessureModal').classList.remove('hidden');
+    }
+    
+    function closeBlessure() {
+        document.getElementById('blessureModal').classList.add('hidden');
+    }
+    
+    // Fermer le modal en cliquant en dehors
+    document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('blessureModal');
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeBlessure();
+            }
+        });
+    });
+</script>
