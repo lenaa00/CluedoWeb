@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CluedoWeb")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a2dbb9be89c83b780a1cb426e836b27e85e3f939")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d4b43c574c3d8742075f235f732164929870a59e")]
 [assembly: System.Reflection.AssemblyProductAttribute("CluedoWeb")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CluedoWeb")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
