@@ -8,24 +8,32 @@
     "net10.0": []
   },
   "packageFolders": {
-    "C:\\Users\\lenal\\.nuget\\packages\\": {}
+    "C:\\Users\\travail\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\lenal\\OneDrive\\Desktop\\CluedoWeb\\CluedoWeb.csproj",
+      "projectUniqueName": "C:\\Users\\travail\\CluedoWeb\\CluedoWeb.csproj",
       "projectName": "CluedoWeb",
-      "projectPath": "C:\\Users\\lenal\\OneDrive\\Desktop\\CluedoWeb\\CluedoWeb.csproj",
-      "packagesPath": "C:\\Users\\lenal\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\lenal\\OneDrive\\Desktop\\CluedoWeb\\obj\\",
+      "projectPath": "C:\\Users\\travail\\CluedoWeb\\CluedoWeb.csproj",
+      "packagesPath": "C:\\Users\\travail\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\travail\\CluedoWeb\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\lenal\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\travail\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {

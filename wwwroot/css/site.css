@@ -45,12 +45,24 @@ body {
     justify-content: flex-start;
     align-items: center;
 
-    padding-top: 200px;
+    padding-top: 20vh;
 
     color: white;
     text-align: center;
 
     
+}
+
+@media (max-width: 768px) {
+    .home {
+        padding-top: 15vh;
+    }
+}
+
+@media (max-width: 480px) {
+    .home {
+        padding-top: 10vh;
+    }
 }
 
 .home p {
@@ -61,13 +73,25 @@ body {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
+@media (max-width: 768px) {
+    .home p {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .home p {
+        font-size: 18px;
+    }
+}
+
 .hotspot-bouton1 {
     position: absolute;
 
     top: 61%;
-    left: 50%;
-    width: 200px;
-    height: 60px;
+    left: 60%;
+    width: 15vw;
+    height: 8vh;
 
     transform: translate(-50%, -50%);
 
@@ -79,14 +103,64 @@ body {
     position: absolute;
 
     top: 78%;
-    left: 50%;
-    width: 200px;
-    height: 60px;
+    left: 60%;
+    width: 15vw;
+    height: 8vh;
 
     transform: translate(-50%, -50%);
 
     cursor: pointer;
     background: transparent;
+}
+
+.hotspot-bouton3 {
+    position: absolute;
+
+    top: 50%;
+    left: 30%;
+    width: 15vw;
+    height: 8vh;
+
+    cursor: pointer;
+    background: transparent;
+}
+
+.hotspot-bouton4 {
+    position: absolute;
+
+    top: 60%;
+    left: 70%;
+    width: 15vw;
+    height: 8vh;
+
+    cursor: pointer;
+    background: transparent;
+}
+
+.hotspot-bouton5 {
+    position: absolute;
+
+    top: 80%;
+    left: 20%;
+    width: 15vw;
+    height: 8vh;
+
+    cursor: pointer;
+    background: transparent;
+}
+
+@media (max-width: 768px) {
+    .hotspot-bouton1, .hotspot-bouton2, .hotspot-bouton3, .hotspot-bouton4, .hotspot-bouton5 {
+        width: 20vw;
+        height: 10vh;
+    }
+}
+
+@media (max-width: 480px) {
+    .hotspot-bouton1, .hotspot-bouton2, .hotspot-bouton3, .hotspot-bouton4, .hotspot-bouton5 {
+        width: 25vw;
+        height: 12vh;
+    }
 }
 
 .salle1 {
@@ -104,19 +178,64 @@ body {
     justify-content: flex-start;
     align-items: center;
 
-    padding-top: 500px;
-    padding-right: 100px;
-
     color: black;
     text-align: center;
+}
 
-    
+.salle1-text {
+    position: absolute;
+    left: 47%;
+    top: 76vh;
+    width: 47vw;
+    max-width: 520px;
+    min-width: 260px;
+    transform: translateX(-50%);
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .salle1-text {
+        top: 78vh;
+        width: 58vw;
+    }
+}
+
+@media (max-width: 480px) {
+    .salle1-text {
+        top: 65vh;
+        width: 70vw;
+    }
 }
 
 .salle1 p {
     font-size: 20px;
     color: black;
     font-weight: 500;
+    margin: 0 0 0.5rem;
+}
+
+@media (max-width: 768px) {
+    .salle1 p {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .salle1 p {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    .salle1 p {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .salle1 p {
+        font-size: 16px;
+    }
 }
 
 .rules-page {
@@ -145,6 +264,20 @@ body {
     text-align: center;
 }
 
+@media (max-width: 768px) {
+    .rules-content {
+        max-width: 90%;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .rules-content {
+        max-width: 95%;
+        padding: 15px;
+    }
+}
+
 .rules-content h1 {
     margin-bottom: 20px;
     font-size: 32px;
@@ -164,6 +297,30 @@ body {
 .rules-content li {
     margin: 8px 0;
     font-size: 16px;
+}
+
+@media (max-width: 768px) {
+    .rules-content h1 {
+        font-size: 28px;
+    }
+    .rules-content p {
+        font-size: 14px;
+    }
+    .rules-content li {
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .rules-content h1 {
+        font-size: 24px;
+    }
+    .rules-content p {
+        font-size: 13px;
+    }
+    .rules-content li {
+        font-size: 14px;
+    }
 }
 
 .warning {
