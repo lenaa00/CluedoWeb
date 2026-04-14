@@ -1,0 +1,186 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+  color: var(--bs-secondary-color);
+  text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+  text-align: start;
+}
+
+.home {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    
+    background-image: url('/images/accueil.png');
+    background-size: cover;        
+    background-position: center;    
+    background-repeat: no-repeat;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    padding-top: 200px;
+
+    color: white;
+    text-align: center;
+
+    
+}
+
+.home p {
+    font-size: 13px;
+    color: white;
+    font-weight: 700;
+
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.hotspot-bouton1 {
+    position: absolute;
+
+    top: 61%;
+    left: 50%;
+    width: 200px;
+    height: 60px;
+
+    transform: translate(-50%, -50%);
+
+    cursor: pointer;
+    background: transparent;
+}
+
+.hotspot-bouton2 {
+    position: absolute;
+
+    top: 78%;
+    left: 50%;
+    width: 200px;
+    height: 60px;
+
+    transform: translate(-50%, -50%);
+
+    cursor: pointer;
+    background: transparent;
+}
+
+.salle1 {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    
+    background-image: url('/images/scene de crime.png');
+    background-size: cover;        
+    background-position: center;    
+    background-repeat: no-repeat;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    padding-top: 500px;
+    padding-right: 100px;
+
+    color: black;
+    text-align: center;
+
+    
+}
+
+.salle1 p {
+    font-size: 20px;
+    color: black;
+    font-weight: 500;
+}
+
+.rules-page {
+    height: 100vh;
+    width: 100%;
+
+    background-image: url('/images/regles.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.rules-content {
+    max-width: 700px;
+    padding: 30px;
+
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 10px;
+
+    color: white;
+    text-align: center;
+}
+
+.rules-content h1 {
+    margin-bottom: 20px;
+    font-size: 32px;
+}
+
+.rules-content p {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+.rules-content ul {
+    list-style: none;
+    padding: 0;
+}
+
+.rules-content li {
+    margin: 8px 0;
+    font-size: 16px;
+}
+
+.warning {
+    color: #ff4d4d;
+    font-weight: 800;
+    margin-top: 15px;
+}
+
+.start-btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 18px;
+
+    background: white;
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+
+    border-radius: 6px;
+}
