@@ -198,6 +198,49 @@ body {
     text-align: center;
 }
 
+.next-room-button {
+    position: absolute;
+    right: 4vw;
+    bottom: 4vh;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    color: #000;
+    font-size: 2.4rem;
+    text-decoration: none;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+    transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.next-room-button:hover {
+    transform: translateX(-50%) scale(1.05);
+    background: rgba(255, 255, 255, 1);
+    color: #111;
+}
+
+@media (max-width: 768px) {
+    .next-room-button {
+        width: 60px;
+        height: 60px;
+        font-size: 2rem;
+        bottom: 5vh;
+    }
+}
+
+@media (max-width: 480px) {
+    .next-room-button {
+        width: 54px;
+        height: 54px;
+        font-size: 1.8rem;
+        bottom: 4vh;
+    }
+}
+
 @media (max-width: 768px) {
     .salle1-text {
         top: 78vh;
@@ -241,6 +284,37 @@ body {
     .salle1 p {
         font-size: 16px;
     }
+}
+
+.autopsie-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 1rem;
+    text-align: center;
+    background: #111;
+    color: #fff;
+}
+
+.autopsie-text {
+    max-width: 700px;
+}
+
+.autopsie-text h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.autopsie-text p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+}
+
+.autopsie-text .start-btn {
+    background: #fff;
+    color: #000;
 }
 
 .rules-page {
