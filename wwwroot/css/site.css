@@ -45,23 +45,32 @@ body {
     justify-content: flex-start;
     align-items: center;
 
-    padding-top: 20vh;
-
     color: white;
     text-align: center;
+}
 
-    
+.home-text {
+    position: absolute;
+    left: 50%;
+    top: 35vh;
+    width: 40vw;
+    max-width: 720px;
+    min-width: 260px;
+    transform: translateX(-50%);
+    text-align: center;
 }
 
 @media (max-width: 768px) {
-    .home {
-        padding-top: 15vh;
+    .home-text {
+        top: 32vh;
+        width: 60vw;
     }
 }
 
 @media (max-width: 480px) {
-    .home {
-        padding-top: 10vh;
+    .home-text {
+        top: 30vh;
+        width: 75vw;
     }
 }
 
@@ -85,32 +94,28 @@ body {
     }
 }
 
-.hotspot-bouton1 {
+.hotspot-bouton1,
+.hotspot-bouton2 {
     position: absolute;
-
-    top: 61%;
-    left: 60%;
-    width: 15vw;
-    height: 8vh;
-
-    transform: translate(-50%, -50%);
-
+    display: block;
+    z-index: 10;
     cursor: pointer;
     background: transparent;
+    transform: translateX(-50%);
+}
+
+.hotspot-bouton1 {
+    top: 60%;
+    left: 50%;
+    width: 40vw;
+    height: 10vh;
 }
 
 .hotspot-bouton2 {
-    position: absolute;
-
-    top: 78%;
-    left: 60%;
-    width: 15vw;
-    height: 8vh;
-
-    transform: translate(-50%, -50%);
-
-    cursor: pointer;
-    background: transparent;
+    top: 72%;
+    left: 50%;
+    width: 40vw;
+    height: 10vh;
 }
 
 .hotspot-bouton3 {
