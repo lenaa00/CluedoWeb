@@ -369,6 +369,24 @@ body {
     border-radius: 4px;
 }
 
+@media (max-width: 768px) {
+    .hotspot-blessure {
+        top: 40%;
+        left: 60%;
+        width: 25vw;
+        height: 18vh;
+    }
+}
+
+@media (max-width: 480px) {
+    .hotspot-blessure {
+        top: 35%;
+        left: 55%;
+        width: 35vw;
+        height: 20vh;
+    }
+}
+
 /* Modal pour afficher l'image blessure */
 .modal-blessure {
     position: fixed;

@@ -192,4 +192,4 @@ C:\Users\travail\CluedoWeb\obj\Debug\net10.0\refint\CluedoWeb.dll
 C:\Users\travail\CluedoWeb\obj\Debug\net10.0\CluedoWeb.pdb
 C:\Users\travail\CluedoWeb\obj\Debug\net10.0\CluedoWeb.genruntimeconfig.cache
 C:\Users\travail\CluedoWeb\obj\Debug\net10.0\ref\CluedoWeb.dll
-C:\Users\travail\CluedoWeb\obj\Debug\net10.0\compressed\uscm53pc6j-{0}-591m08ohj1-591m08ohj1.gz
+C:\Users\travail\CluedoWeb\obj\Debug\net10.0\compressed\uscm53pc6j-{0}-pq8glqp79s-pq8glqp79s.gz
