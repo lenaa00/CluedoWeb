@@ -287,34 +287,104 @@ body {
 }
 
 .autopsie-page {
+    position: relative;
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 4rem 1rem;
     text-align: center;
-    background: #111;
+    background-image: url('/images/salle autopsie.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     color: #fff;
 }
 
-.autopsie-text {
+.autopsie-overlay {
     max-width: 700px;
+    text-align: center;
+    transform: translateY(-14vh);
 }
 
-.autopsie-text h1 {
-    font-size: 3rem;
+.autopsie-overlay h1 {
+    font-size: clamp(2rem, 5vw, 3.2rem);
     margin-bottom: 1rem;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
 }
 
-.autopsie-text p {
-    font-size: 1.1rem;
-    line-height: 1.8;
-    margin-bottom: 1.5rem;
-}
-
-.autopsie-text .start-btn {
+.autopsie-overlay .start-btn {
+    margin-top: 0;
     background: #fff;
     color: #000;
+}
+
+.autopsie-bubble {
+    position: absolute;
+    left: 53%;
+    bottom: 17vh;
+    width: min(44vw, 520px);
+    min-height: 140px;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.1rem 1.8rem;
+    text-align: center;
+}
+
+.autopsie-bubble p {
+    margin: 0;
+    font-size: clamp(0.95rem, 1.5vw, 1.2rem);
+    line-height: 1.45;
+    color: #111;
+    font-weight: 600;
+}
+
+@media (max-width: 900px) {
+    .autopsie-overlay {
+        transform: translateY(-10vh);
+    }
+
+    .autopsie-bubble {
+        left: 56%;
+        bottom: 5vh;
+        width: min(50vw, 470px);
+        min-height: 120px;
+        padding: 0.95rem 1.2rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .autopsie-overlay {
+        transform: translateY(-8vh);
+    }
+
+    .autopsie-bubble {
+        left: 58%;
+        bottom: 4.5vh;
+        width: min(56vw, 360px);
+        min-height: 110px;
+    }
+}
+
+@media (max-width: 480px) {
+    .autopsie-overlay {
+        transform: translateY(-7vh);
+    }
+
+    .autopsie-bubble {
+        left: 60%;
+        bottom: 4vh;
+        width: min(60vw, 310px);
+        min-height: 95px;
+        padding: 0.75rem 0.9rem;
+    }
+
+    .autopsie-bubble p {
+        font-size: clamp(0.72rem, 2.2vw, 0.92rem);
+        line-height: 1.35;
+    }
 }
 
 .rules-page {
