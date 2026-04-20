@@ -8,9 +8,6 @@ namespace CluedoWeb.Pages;
 public class Salle1Model : PageModel
 {
     [BindProperty]
-    public string Reponse { get; set; } = string.Empty;
-
-    [BindProperty]
     public string Mot1 { get; set; } = string.Empty;
 
     [BindProperty]
@@ -22,36 +19,34 @@ public class Salle1Model : PageModel
     [BindProperty]
     public string Mot4 { get; set; } = string.Empty;
 
-    public bool Reussi { get; set; }
+    // 🔥 ENIGME TRIANGLE
+    [BindProperty]
+    public string ReponseTriangle { get; set; } = string.Empty;
+
+    public bool TriangleReussi { get; set; }
+    public bool MauvaiseReponse { get; set; }
 
     public bool EnigmeReussie { get; set; }
-
-    public bool OuvrirTapis { get; set; }
 
     public string MessageEnigme { get; set; } = string.Empty;
 
     public IReadOnlyList<TextToken> LetterTokens => ConstruireTokens();
-
     public Dictionary<string, bool?> ResultatsMots { get; } = new();
 
-    public void OnGet()
+    public void OnPostTriangle()
     {
-    }
-
-    public void OnPost()
-    {
-        string solution = "tu vas payer pour le mal que tu m as fais";
-
-        if (!string.IsNullOrEmpty(Reponse) && Reponse.ToLower().Trim() == solution)
+        if (ReponseTriangle.Trim() == "78")
         {
-            Reussi = true;
+            TriangleReussi = true;
+        }
+        else
+        {
+            MauvaiseReponse = true;
         }
     }
 
     public void OnPostEnigmeLettre()
     {
-        OuvrirTapis = true;
-
         bool mot1Ok = MotCorrect(Mot1, "payer");
         bool mot2Ok = MotCorrect(Mot2, "mal");
         bool mot3Ok = MotCorrect(Mot3, "planter");
@@ -65,11 +60,6 @@ public class Salle1Model : PageModel
         if (mot1Ok && mot2Ok && mot3Ok && mot4Ok)
         {
             EnigmeReussie = true;
-            MessageEnigme = "Bravo ! Tu as reconstitue les mots de la lettre.";
-        }
-        else
-        {
-            MessageEnigme = "Certains mots ne sont pas encore corrects.";
         }
     }
 

@@ -12,122 +12,114 @@
     <button class="hotspot-tiroir" type="button" onclick="showTiroir()"></button>
     <button class="hotspot-tapis" type="button" onclick="showTapis()"></button>
 
-    <a href="/Autopsie" class="next-room-button" aria-label="Continuer vers l'autopsie">&#8594;</a>
+    <a href="/Autopsie" class="next-room-button">&#8594;</a>
 </div>
 
+<!-- BLESSURE -->
 <div id="blessureModal" class="modal-blessure hidden">
     <div class="modal-blessure-content">
-        <button class="modal-blessure-close" type="button" onclick="closeBlessure()">&times;</button>
-        <img src="/images/blessure.png" alt="Blessure" />
+        <button class="modal-blessure-close" onclick="closeBlessure()">&times;</button>
+        <img src="/images/blessure.png" />
     </div>
 </div>
 
+<!-- TIROIR -->
 <div id="tiroirModal" class="modal-tiroir hidden">
     <div class="modal-tiroir-content modal-tiroir-enigme">
-        <button class="modal-tiroir-close" type="button" onclick="closeTiroir()">&times;</button>
+        <button class="modal-tiroir-close" onclick="closeTiroir()">&times;</button>
 
-        <div class="tiroir-enigme-layout">
-            <img src="/images/scene de crime tiroir.png" alt="Tiroir" />
+        <div class="tiroir-enigme-panel">
+            <h2>Enigme</h2>
+            <p>Trouve la logique et complete le triangle.</p>
 
-            <div class="tiroir-enigme-panel">
-                <h2>Tiroir verrouille</h2>
-                <p>La serrure a une empreinte tres particuliere. Choisis la cle qui correspond a sa forme pour ouvrir le tiroir.</p>
+            <form method="post" asp-page-handler="Triangle">
 
-                <div class="lock-shape" aria-hidden="true">
-                    <span class="lock-shape-head"></span>
-                    <span class="lock-shape-body"></span>
-                    <span class="lock-shape-tooth lock-shape-tooth-a"></span>
-                    <span class="lock-shape-tooth lock-shape-tooth-b"></span>
+                <div class="triangles">
+
+                    <div class="triangle">
+                        <span class="top">2</span>
+                        <span class="left">2</span>
+                        <span class="right">3</span>
+                        <span class="center">10</span>
+                    </div>
+
+                    <div class="triangle">
+                        <span class="top">4</span>
+                        <span class="left">4</span>
+                        <span class="right">5</span>
+                        <span class="center">36</span>
+                    </div>
+
+                    <div class="triangle">
+                        <span class="top">6</span>
+                        <span class="left">6</span>
+                        <span class="right">7</span>
+                        <input class="triangle-input" type="text" name="ReponseTriangle" />
+                    </div>
+
                 </div>
 
-                <div class="key-options" role="group" aria-label="Choisir une cle">
-                    <button class="key-option" type="button" onclick="selectKey('ronde')" data-key="ronde">
-                        <span class="key-visual key-round" aria-hidden="true">
-                            <span class="key-head"></span>
-                            <span class="key-stem"></span>
-                            <span class="key-tooth key-tooth-a"></span>
-                            <span class="key-tooth key-tooth-b"></span>
-                        </span>
-                        <span class="key-label">Cle ronde</span>
-                    </button>
+                <button type="submit">Valider</button>
+            </form>
 
-                    <button class="key-option" type="button" onclick="selectKey('carree')" data-key="carree">
-                        <span class="key-visual key-square" aria-hidden="true">
-                            <span class="key-head"></span>
-                            <span class="key-stem"></span>
-                            <span class="key-tooth key-tooth-a"></span>
-                            <span class="key-tooth key-tooth-b"></span>
-                        </span>
-                        <span class="key-label">Cle carree</span>
-                    </button>
+            @if (Model.MauvaiseReponse)
+            {
+                <p style="color:red;">Mauvaise reponse... retente ta chance.</p>
+            }
 
-                    <button class="key-option" type="button" onclick="selectKey('dentelée')" data-key="dentelée">
-                        <span class="key-visual key-notched" aria-hidden="true">
-                            <span class="key-head"></span>
-                            <span class="key-stem"></span>
-                            <span class="key-tooth key-tooth-a"></span>
-                            <span class="key-tooth key-tooth-b"></span>
-                        </span>
-                        <span class="key-label">Cle dentelee</span>
-                    </button>
+            @if (Model.TriangleReussi)
+            {
+                <p style="color:green;">Indice debloque !</p>
+
+                <img src="/images/scene de crime tiroir.png" style="margin-top:20px; max-width:100%;" />
+
+                <div class="revealed-drawer-clue">
+                    <p><strong>Vous avez trouve un manche en bois dans le tiroir.</strong></p>
                 </div>
+            }
 
-                <p id="tiroirFeedback" class="tiroir-enigme-feedback">Observe bien l'encoche de la serrure avant de choisir.</p>
-
-                <div id="tiroirIndice" class="revealed-drawer-clue hidden">
-                    <h3>Indice decouvert</h3>
-                    <p>Au fond du tiroir, un billet est cache : <strong>"Le tiroir contenait une cle de talon remplacee il y a peu."</strong></p>
-                </div>
-            </div>
         </div>
     </div>
 </div>
 
+<!-- TAPIS (inchangé) -->
 <div id="tapisModal" class="modal-tapis hidden">
     <div class="modal-tapis-content modal-tapis-enigme">
-        <button class="modal-tapis-close" type="button" onclick="closeTapis()">&times;</button>
+        <button class="modal-tapis-close" onclick="closeTapis()">&times;</button>
 
         <div class="tapis-enigme-layout">
-            <img src="/images/scene de crime lettre.png" alt="Tapis" />
+            <img src="/images/scene de crime lettre.png" />
 
             <div class="letter-enigme-panel">
                 <h2>Lettre dechiree</h2>
-                <p>Retrouve les bons mots a partir des mots melanges.</p>
 
-                <form method="post" asp-page-handler="EnigmeLettre" class="letter-enigme-form">
+                <form method="post" asp-page-handler="EnigmeLettre">
                     <div class="letter-sentence">
                         @foreach (var token in Model.LetterTokens)
                         {
                             if (token.EstMotMelange)
                             {
-                                var classeEtat = token.EstCorrect == true ? "is-correct" : token.EstCorrect == false ? "is-incorrect" : string.Empty;
+                                var classeEtat = token.EstCorrect == true ? "is-correct" : token.EstCorrect == false ? "is-incorrect" : "";
 
                                 <label class="scrambled-word @classeEtat">
-                                    <span class="scrambled-text">@token.Texte</span>
-                                    <input type="text" name="@token.Champ" value="@token.Valeur" autocomplete="off" />
+                                    <span>@token.Texte</span>
+                                    <input type="text" name="@token.Champ" value="@token.Valeur" />
                                 </label>
                             }
                             else
                             {
-                                <span class="letter-word">@token.Texte</span>
+                                <span>@token.Texte</span>
                             }
                         }
                     </div>
 
-                    <button type="submit" class="letter-enigme-button">Verifier</button>
+                    <button type="submit">Verifier</button>
                 </form>
-
-                @if (!string.IsNullOrWhiteSpace(Model.MessageEnigme))
-                {
-                    <p class="letter-enigme-feedback">@Model.MessageEnigme</p>
-                }
 
                 @if (Model.EnigmeReussie)
                 {
-                    <div class="revealed-letter">
-                        <h3>Lettre reconstituee</h3>
-                        <p>Tu vas payer pour le mal que tu m'as fais ! Je n'hesiterais pas a te planter mon talon dans le dos.</p>
-                    </div>
+                    <p>Lettre complete :</p>
+                    <p>Tu vas payer pour le mal que tu m'as fais ! Je n'hesiterais pas a te planter mon talon dans le dos.</p>
                 }
             </div>
         </div>
@@ -135,8 +127,6 @@
 </div>
 
 <script>
-    let tiroirUnlocked = false;
-
     function showBlessure() {
         document.getElementById('blessureModal').classList.remove('hidden');
     }
@@ -147,53 +137,10 @@
 
     function showTiroir() {
         document.getElementById('tiroirModal').classList.remove('hidden');
-        updateTiroirState();
     }
 
     function closeTiroir() {
         document.getElementById('tiroirModal').classList.add('hidden');
-    }
-
-    function selectKey(key) {
-        const feedback = document.getElementById('tiroirFeedback');
-        const indice = document.getElementById('tiroirIndice');
-        const options = document.querySelectorAll('.key-option');
-        const bonneCle = 'carree';
-
-        options.forEach(function(option) {
-            option.classList.remove('is-correct', 'is-incorrect');
-        });
-
-        const selectedOption = document.querySelector('.key-option[data-key="' + key + '"]');
-        if (!selectedOption) {
-            return;
-        }
-
-        if (key === bonneCle) {
-            tiroirUnlocked = true;
-            selectedOption.classList.add('is-correct');
-            feedback.textContent = "Le mecanisme cede. Le tiroir s'ouvre et laisse apparaitre un indice.";
-            indice.classList.remove('hidden');
-        } else {
-            selectedOption.classList.add('is-incorrect');
-            feedback.textContent = "Cette cle ne correspond pas a la forme de la serrure.";
-            if (!tiroirUnlocked) {
-                indice.classList.add('hidden');
-            }
-        }
-    }
-
-    function updateTiroirState() {
-        const feedback = document.getElementById('tiroirFeedback');
-        const indice = document.getElementById('tiroirIndice');
-
-        if (tiroirUnlocked) {
-            feedback.textContent = "Le tiroir est deja ouvert. L'indice est visible.";
-            indice.classList.remove('hidden');
-        } else {
-            feedback.textContent = "Observe bien l'encoche de la serrure avant de choisir.";
-            indice.classList.add('hidden');
-        }
     }
 
     function showTapis() {
@@ -203,33 +150,4 @@
     function closeTapis() {
         document.getElementById('tapisModal').classList.add('hidden');
     }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const blessureModal = document.getElementById('blessureModal');
-        const tiroirModal = document.getElementById('tiroirModal');
-        const tapisModal = document.getElementById('tapisModal');
-
-        blessureModal.addEventListener('click', function(e) {
-            if (e.target === blessureModal) {
-                closeBlessure();
-            }
-        });
-
-        tiroirModal.addEventListener('click', function(e) {
-            if (e.target === tiroirModal) {
-                closeTiroir();
-            }
-        });
-
-        tapisModal.addEventListener('click', function(e) {
-            if (e.target === tapisModal) {
-                closeTapis();
-            }
-        });
-
-        const ouvrirTapis = @Model.OuvrirTapis.ToString().ToLowerInvariant();
-        if (ouvrirTapis) {
-            showTapis();
-        }
-    });
 </script>

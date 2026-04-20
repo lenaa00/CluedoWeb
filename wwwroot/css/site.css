@@ -1065,3 +1065,57 @@ body {
         min-width: 70px;
     }
 }
+
+.triangle {
+    width: 120px;
+    height: 100px;
+    position: relative;
+    margin: 20px;
+}
+
+.triangle::before {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 60px solid transparent;
+    border-right: 60px solid transparent;
+    border-bottom: 100px solid #5e2b1f;
+}
+
+.triangle span,
+.triangle input {
+    position: absolute;
+    z-index: 2;
+    color: black;
+    font-weight: bold;
+}
+
+.top {
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.left {
+    bottom: 5px;
+    left: 10px;
+}
+
+.right {
+    bottom: 5px;
+    right: 10px;
+}
+
+.center,
+.triangle-input {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.triangles {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
