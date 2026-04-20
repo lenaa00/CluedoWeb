@@ -23,9 +23,63 @@
 </div>
 
 <div id="tiroirModal" class="modal-tiroir hidden">
-    <div class="modal-tiroir-content">
+    <div class="modal-tiroir-content modal-tiroir-enigme">
         <button class="modal-tiroir-close" type="button" onclick="closeTiroir()">&times;</button>
-        <img src="/images/scene de crime tiroir.png" alt="Tiroir" />
+
+        <div class="tiroir-enigme-layout">
+            <img src="/images/scene de crime tiroir.png" alt="Tiroir" />
+
+            <div class="tiroir-enigme-panel">
+                <h2>Tiroir verrouille</h2>
+                <p>La serrure a une empreinte tres particuliere. Choisis la cle qui correspond a sa forme pour ouvrir le tiroir.</p>
+
+                <div class="lock-shape" aria-hidden="true">
+                    <span class="lock-shape-head"></span>
+                    <span class="lock-shape-body"></span>
+                    <span class="lock-shape-tooth lock-shape-tooth-a"></span>
+                    <span class="lock-shape-tooth lock-shape-tooth-b"></span>
+                </div>
+
+                <div class="key-options" role="group" aria-label="Choisir une cle">
+                    <button class="key-option" type="button" onclick="selectKey('ronde')" data-key="ronde">
+                        <span class="key-visual key-round" aria-hidden="true">
+                            <span class="key-head"></span>
+                            <span class="key-stem"></span>
+                            <span class="key-tooth key-tooth-a"></span>
+                            <span class="key-tooth key-tooth-b"></span>
+                        </span>
+                        <span class="key-label">Cle ronde</span>
+                    </button>
+
+                    <button class="key-option" type="button" onclick="selectKey('carree')" data-key="carree">
+                        <span class="key-visual key-square" aria-hidden="true">
+                            <span class="key-head"></span>
+                            <span class="key-stem"></span>
+                            <span class="key-tooth key-tooth-a"></span>
+                            <span class="key-tooth key-tooth-b"></span>
+                        </span>
+                        <span class="key-label">Cle carree</span>
+                    </button>
+
+                    <button class="key-option" type="button" onclick="selectKey('dentelée')" data-key="dentelée">
+                        <span class="key-visual key-notched" aria-hidden="true">
+                            <span class="key-head"></span>
+                            <span class="key-stem"></span>
+                            <span class="key-tooth key-tooth-a"></span>
+                            <span class="key-tooth key-tooth-b"></span>
+                        </span>
+                        <span class="key-label">Cle dentelee</span>
+                    </button>
+                </div>
+
+                <p id="tiroirFeedback" class="tiroir-enigme-feedback">Observe bien l'encoche de la serrure avant de choisir.</p>
+
+                <div id="tiroirIndice" class="revealed-drawer-clue hidden">
+                    <h3>Indice decouvert</h3>
+                    <p>Au fond du tiroir, un billet est cache : <strong>"Le tiroir contenait une cle de talon remplacee il y a peu."</strong></p>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -81,6 +135,8 @@
 </div>
 
 <script>
+    let tiroirUnlocked = false;
+
     function showBlessure() {
         document.getElementById('blessureModal').classList.remove('hidden');
     }
@@ -91,10 +147,53 @@
 
     function showTiroir() {
         document.getElementById('tiroirModal').classList.remove('hidden');
+        updateTiroirState();
     }
 
     function closeTiroir() {
         document.getElementById('tiroirModal').classList.add('hidden');
+    }
+
+    function selectKey(key) {
+        const feedback = document.getElementById('tiroirFeedback');
+        const indice = document.getElementById('tiroirIndice');
+        const options = document.querySelectorAll('.key-option');
+        const bonneCle = 'carree';
+
+        options.forEach(function(option) {
+            option.classList.remove('is-correct', 'is-incorrect');
+        });
+
+        const selectedOption = document.querySelector('.key-option[data-key="' + key + '"]');
+        if (!selectedOption) {
+            return;
+        }
+
+        if (key === bonneCle) {
+            tiroirUnlocked = true;
+            selectedOption.classList.add('is-correct');
+            feedback.textContent = "Le mecanisme cede. Le tiroir s'ouvre et laisse apparaitre un indice.";
+            indice.classList.remove('hidden');
+        } else {
+            selectedOption.classList.add('is-incorrect');
+            feedback.textContent = "Cette cle ne correspond pas a la forme de la serrure.";
+            if (!tiroirUnlocked) {
+                indice.classList.add('hidden');
+            }
+        }
+    }
+
+    function updateTiroirState() {
+        const feedback = document.getElementById('tiroirFeedback');
+        const indice = document.getElementById('tiroirIndice');
+
+        if (tiroirUnlocked) {
+            feedback.textContent = "Le tiroir est deja ouvert. L'indice est visible.";
+            indice.classList.remove('hidden');
+        } else {
+            feedback.textContent = "Observe bien l'encoche de la serrure avant de choisir.";
+            indice.classList.add('hidden');
+        }
     }
 
     function showTapis() {
