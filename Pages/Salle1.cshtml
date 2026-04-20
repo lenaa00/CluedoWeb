@@ -1,45 +1,82 @@
 @page
+@model CluedoWeb.Pages.Salle1Model
+@using CluedoWeb.Pages
 
 <div class="salle1">
     <div class="salle1-text">
-        <p>Oh vous voilà enfin !</p>
-        <p>Nous pouvons démarrer l'enquête, <br />la scène de crime est à vous... </p>
+        <p>Oh vous voila enfin !</p>
+        <p>Nous pouvons demarrer l'enquete, <br />la scene de crime est a vous...</p>
     </div>
-    
-    <!-- Zone cliquable pour la blessure -->
-    <button class="hotspot-blessure" onclick="showBlessure()"></button>
-    
-    <!-- Zone cliquable pour le tiroir -->
-    <button class="hotspot-tiroir" onclick="showTiroir()"></button>
-    
-    <!-- Zone cliquable pour le tapis -->
-    <button class="hotspot-tapis" onclick="showTapis()"></button>
 
-    <!-- Bouton pour aller à l'autopsie -->
-    <a href="/Autopsie" class="next-room-button" aria-label="Continuer vers l'autopsie">→</a>
+    <button class="hotspot-blessure" type="button" onclick="showBlessure()"></button>
+    <button class="hotspot-tiroir" type="button" onclick="showTiroir()"></button>
+    <button class="hotspot-tapis" type="button" onclick="showTapis()"></button>
+
+    <a href="/Autopsie" class="next-room-button" aria-label="Continuer vers l'autopsie">&#8594;</a>
 </div>
 
-<!-- Modal pour afficher l'image blessure -->
 <div id="blessureModal" class="modal-blessure hidden">
     <div class="modal-blessure-content">
-        <button class="modal-blessure-close" onclick="closeBlessure()">×</button>
+        <button class="modal-blessure-close" type="button" onclick="closeBlessure()">&times;</button>
         <img src="/images/blessure.png" alt="Blessure" />
     </div>
 </div>
 
-<!-- Modal pour afficher l'image tiroir -->
 <div id="tiroirModal" class="modal-tiroir hidden">
     <div class="modal-tiroir-content">
-        <button class="modal-tiroir-close" onclick="closeTiroir()">×</button>
+        <button class="modal-tiroir-close" type="button" onclick="closeTiroir()">&times;</button>
         <img src="/images/scene de crime tiroir.png" alt="Tiroir" />
     </div>
 </div>
 
-<!-- Modal pour afficher l'image tapis -->
 <div id="tapisModal" class="modal-tapis hidden">
-    <div class="modal-tapis-content">
-        <button class="modal-tapis-close" onclick="closeTapis()">×</button>
-        <img src="/images/scene de crime lettre.png" alt="Tapis" />
+    <div class="modal-tapis-content modal-tapis-enigme">
+        <button class="modal-tapis-close" type="button" onclick="closeTapis()">&times;</button>
+
+        <div class="tapis-enigme-layout">
+            <img src="/images/scene de crime lettre.png" alt="Tapis" />
+
+            <div class="letter-enigme-panel">
+                <h2>Lettre dechiree</h2>
+                <p>Retrouve les bons mots a partir des mots melanges.</p>
+
+                <form method="post" asp-page-handler="EnigmeLettre" class="letter-enigme-form">
+                    <div class="letter-sentence">
+                        @foreach (var token in Model.LetterTokens)
+                        {
+                            if (token.EstMotMelange)
+                            {
+                                var classeEtat = token.EstCorrect == true ? "is-correct" : token.EstCorrect == false ? "is-incorrect" : string.Empty;
+
+                                <label class="scrambled-word @classeEtat">
+                                    <span class="scrambled-text">@token.Texte</span>
+                                    <input type="text" name="@token.Champ" value="@token.Valeur" autocomplete="off" />
+                                </label>
+                            }
+                            else
+                            {
+                                <span class="letter-word">@token.Texte</span>
+                            }
+                        }
+                    </div>
+
+                    <button type="submit" class="letter-enigme-button">Verifier</button>
+                </form>
+
+                @if (!string.IsNullOrWhiteSpace(Model.MessageEnigme))
+                {
+                    <p class="letter-enigme-feedback">@Model.MessageEnigme</p>
+                }
+
+                @if (Model.EnigmeReussie)
+                {
+                    <div class="revealed-letter">
+                        <h3>Lettre reconstituee</h3>
+                        <p>Tu vas payer pour le mal que tu m'as fais ! Je n'hesiterais pas a te planter mon talon dans le dos.</p>
+                    </div>
+                }
+            </div>
+        </div>
     </div>
 </div>
 
@@ -47,49 +84,53 @@
     function showBlessure() {
         document.getElementById('blessureModal').classList.remove('hidden');
     }
-    
+
     function closeBlessure() {
         document.getElementById('blessureModal').classList.add('hidden');
     }
-    
+
     function showTiroir() {
         document.getElementById('tiroirModal').classList.remove('hidden');
     }
-    
+
     function closeTiroir() {
         document.getElementById('tiroirModal').classList.add('hidden');
     }
-    
+
     function showTapis() {
         document.getElementById('tapisModal').classList.remove('hidden');
     }
-    
+
     function closeTapis() {
         document.getElementById('tapisModal').classList.add('hidden');
     }
-    
-    // Fermer les modals en cliquant en dehors
+
     document.addEventListener('DOMContentLoaded', function() {
         const blessureModal = document.getElementById('blessureModal');
         const tiroirModal = document.getElementById('tiroirModal');
         const tapisModal = document.getElementById('tapisModal');
-        
+
         blessureModal.addEventListener('click', function(e) {
             if (e.target === blessureModal) {
                 closeBlessure();
             }
         });
-        
+
         tiroirModal.addEventListener('click', function(e) {
             if (e.target === tiroirModal) {
                 closeTiroir();
             }
         });
-        
+
         tapisModal.addEventListener('click', function(e) {
             if (e.target === tapisModal) {
                 closeTapis();
             }
         });
+
+        const ouvrirTapis = @Model.OuvrirTapis.ToString().ToLowerInvariant();
+        if (ouvrirTapis) {
+            showTapis();
+        }
     });
 </script>
