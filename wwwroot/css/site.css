@@ -696,11 +696,7 @@ body {
 }
 
 .modal-tiroir-enigme {
-    width: min(1100px, 94vw);
-    background: #f5efe4;
-    border-radius: 18px;
-    padding: 2rem;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    /* Remplacé plus bas dans la section Enigme Triangles */
 }
 
 .tiroir-enigme-layout {
@@ -711,11 +707,7 @@ body {
 }
 
 .tiroir-enigme-panel {
-    background: rgba(255, 255, 255, 0.92);
-    border: 1px solid rgba(80, 53, 31, 0.18);
-    border-radius: 16px;
-    padding: 1.5rem;
-    color: #2f1f14;
+    /* Remplacé plus bas dans la section Enigme Triangles */
 }
 
 .tiroir-enigme-panel h2,
@@ -853,24 +845,27 @@ body {
 
 .modal-tiroir-close {
     position: absolute;
-    top: -40px;
-    right: 0;
-    background: white;
-    border: none;
-    font-size: 32px;
+    top: 12px;
+    right: 12px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #f0e0c0;
+    font-size: 26px;
     cursor: pointer;
     padding: 0;
-    width: 40px;
-    height: 40px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
+    z-index: 10;
+    line-height: 1;
 }
 
 .modal-tiroir-close:hover {
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.28);
     transform: scale(1.1);
 }
 
@@ -1066,54 +1061,416 @@ body {
     }
 }
 
-.triangle {
-    width: 120px;
-    height: 100px;
+/* ================================================
+   ENIGME TRIANGLES — VERSION IMMERSIVE
+   ================================================ */
+
+/* Conteneur principal enigme */
+.tiroir-enigme-panel {
+    background: #1a0e07;
+    border-radius: 18px;
+    padding: 2rem;
+    color: #f0e0c0;
+    width: 100%;
+}
+
+.tiroir-enigme-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.8rem;
+    border-bottom: 1px solid rgba(200,131,42,0.25);
+    padding-bottom: 1.2rem;
+}
+
+.tiroir-enigme-icon {
+    font-size: 2.2rem;
+}
+
+.tiroir-enigme-title {
+    margin: 0 0 0.3rem;
+    font-size: 1.5rem;
+    color: #f5c96e;
+    letter-spacing: 0.04em;
+}
+
+.tiroir-enigme-subtitle {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #c0a080;
+    line-height: 1.5;
+}
+
+/* Grille de triangles */
+.triangles-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+}
+
+.triangle-form {
+    width: 100%;
+}
+
+/* Carte triangle */
+.triangle-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    animation: triAppear 0.5s ease both;
+    animation-delay: var(--delay, 0s);
+}
+
+@keyframes triAppear {
+    from { opacity: 0; transform: translateY(20px) scale(0.9); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.triangle-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #c8832a;
+    background: rgba(200,131,42,0.12);
+    border: 1px solid rgba(200,131,42,0.3);
+    border-radius: 20px;
+    padding: 0.2rem 0.7rem;
+}
+
+.tri-svg {
+    width: 160px;
+    height: 145px;
+    overflow: visible;
+    filter: drop-shadow(0 8px 20px rgba(0,0,0,0.6));
+    transition: transform 0.2s ease;
+}
+
+.triangle-card:hover .tri-svg {
+    transform: translateY(-4px) scale(1.04);
+}
+
+/* Triangle mystère — bordure animée */
+.triangle-card--mystery .tri-svg {
+    animation: pulseGlow 2.5s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+    0%, 100% { filter: drop-shadow(0 8px 20px rgba(0,0,0,0.6)) drop-shadow(0 0 0px rgba(232,160,48,0)); }
+    50% { filter: drop-shadow(0 8px 20px rgba(0,0,0,0.6)) drop-shadow(0 0 18px rgba(232,160,48,0.5)); }
+}
+
+.pulse-dot {
+    animation: dotPulse 2.5s ease-in-out infinite;
+}
+@keyframes dotPulse {
+    0%, 100% { opacity: 0.9; r: 8; }
+    50%       { opacity: 1;   r: 11; }
+}
+
+/* Textes SVG triangles */
+.tri-val {
+    font-family: 'Georgia', serif;
+    font-size: 20px;
+    font-weight: 700;
+    fill: #f5e0b0;
+}
+
+.tri-top {
+    dominant-baseline: auto;
+}
+
+.tri-corner {
+    dominant-baseline: auto;
+}
+
+.tri-center {
+    font-family: 'Georgia', serif;
+    font-size: 22px;
+    font-weight: 900;
+    fill: #ffd97a;
+    dominant-baseline: central;
+}
+
+.tri-center--empty {
+    fill: #e8a030;
+    font-size: 28px;
+    animation: questionPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes questionPulse {
+    0%, 100% { fill: #e8a030; font-size: 28px; }
+    50%       { fill: #ffd97a; font-size: 32px; }
+}
+
+/* Zone de saisie */
+.triangle-input-zone {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+    padding: 1.25rem;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(200,131,42,0.2);
+    border-radius: 14px;
+}
+
+.triangle-input-label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #d4a060;
+    white-space: nowrap;
+}
+
+.triangle-input-field {
+    width: 100px;
+    padding: 0.65rem 1rem;
+    border: 2px solid #c8832a;
+    border-radius: 10px;
+    background: #0d0603;
+    color: #f5e0b0;
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-align: center;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    /* cache les flèches spin */
+    -moz-appearance: textfield;
+}
+
+.triangle-input-field::-webkit-outer-spin-button,
+.triangle-input-field::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.triangle-input-field:focus {
+    border-color: #e8a030;
+    box-shadow: 0 0 0 3px rgba(232,160,48,0.25);
+}
+
+.triangle-submit-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.65rem 1.4rem;
+    background: linear-gradient(135deg, #8b3a1a, #c8642a);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    letter-spacing: 0.03em;
+}
+
+.triangle-submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(200,100,42,0.4);
+}
+
+.triangle-submit-btn:active {
+    transform: translateY(0);
+}
+
+/* Feedback */
+.triangle-feedback {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    animation: feedbackIn 0.3s ease;
+}
+
+@keyframes feedbackIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.triangle-feedback--error {
+    background: rgba(180,30,30,0.15);
+    border: 1px solid rgba(200,60,60,0.35);
+    color: #f08080;
+}
+
+/* Hint */
+.triangle-hint {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-top: 1.2rem;
+    padding: 0.85rem 1rem;
+    background: rgba(200,131,42,0.06);
+    border-left: 3px solid #c8832a;
+    border-radius: 0 10px 10px 0;
+    color: #b8956a;
+    font-size: 0.88rem;
+}
+
+.triangle-hint-icon {
+    font-size: 1.1rem;
+    line-height: 1.4;
+}
+
+/* ================================================
+   REVELATION — Succès de l'énigme
+   ================================================ */
+
+.tiroir-revelation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    /* L'animation est déclenchée par la classe .revelation-anim ajoutée en JS */
+}
+
+@keyframes revelationIn {
+    0%   { opacity: 0; transform: scale(0.88) translateY(16px); }
+    60%  { opacity: 1; transform: scale(1.02) translateY(-4px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.revelation-anim {
+    animation: revelationIn 0.55s cubic-bezier(0.34, 1.2, 0.64, 1) both;
+}
+
+/* Animation shake sur mauvaise réponse */
+@keyframes triShake {
+    0%,100% { transform: translateX(0); }
+    20%     { transform: translateX(-8px); }
+    40%     { transform: translateX(8px); }
+    60%     { transform: translateX(-5px); }
+    80%     { transform: translateX(5px); }
+}
+
+.tri-input-shake {
+    animation: triShake 0.45s ease both !important;
+    border-color: #d92d20 !important;
+    box-shadow: 0 0 0 3px rgba(217,45,32,0.3) !important;
+}
+
+.revelation-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 1.2rem;
+    background: linear-gradient(135deg, #1a5c30, #2e8b57);
+    color: #a8f0c0;
+    font-weight: 700;
+    font-size: 0.95rem;
+    border-radius: 999px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    box-shadow: 0 4px 18px rgba(46,139,87,0.4);
+}
+
+.revelation-check {
+    font-size: 1.2rem;
+}
+
+.revelation-title {
+    margin: 0;
+    font-size: 1.4rem;
+    color: #f5c96e;
+    text-align: center;
+    font-family: 'Georgia', serif;
+}
+
+.revelation-image-wrapper {
     position: relative;
-    margin: 20px;
+    width: 100%;
+    max-width: 600px;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.65);
+    border: 2px solid rgba(200,131,42,0.4);
 }
 
-.triangle::before {
-    content: "";
+.revelation-img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.revelation-overlay-label {
     position: absolute;
-    width: 0;
-    height: 0;
-    border-left: 60px solid transparent;
-    border-right: 60px solid transparent;
-    border-bottom: 100px solid #5e2b1f;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0.6rem 1rem;
+    background: linear-gradient(transparent, rgba(0,0,0,0.75));
+    color: #f0d090;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-align: center;
 }
 
-.triangle span,
-.triangle input {
-    position: absolute;
-    z-index: 2;
-    color: black;
-    font-weight: bold;
+.revelation-clue-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.2rem 1.4rem;
+    background: rgba(255,248,220,0.07);
+    border: 1px solid rgba(200,131,42,0.35);
+    border-left: 5px solid #c8832a;
+    border-radius: 0 14px 14px 0;
+    width: 100%;
+    max-width: 600px;
 }
 
-.top {
-    top: 5px;
-    left: 50%;
-    transform: translateX(-50%);
+.revelation-clue-icon {
+    font-size: 2rem;
+    line-height: 1;
+    flex-shrink: 0;
 }
 
-.left {
-    bottom: 5px;
-    left: 10px;
+.revelation-clue-title {
+    margin: 0 0 0.3rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #c8832a;
 }
 
-.right {
-    bottom: 5px;
-    right: 10px;
+.revelation-clue-text {
+    margin: 0;
+    color: #e0c8a0;
+    line-height: 1.7;
+    font-size: 0.97rem;
 }
 
-.center,
-.triangle-input {
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+.revelation-clue-text strong {
+    color: #f5c96e;
 }
 
+/* ================================================
+   MODAL TIROIR — overrides pour nouveau contenu
+   ================================================ */
+
+.modal-tiroir-enigme {
+    width: min(720px, 94vw);
+    background: #1a0e07;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05);
+    border: 1px solid rgba(200,131,42,0.2);
+}
+
+/* ================================================
+   LEGACY — garder .triangles pour compatibilité
+   ================================================ */
 .triangles {
     display: flex;
     justify-content: space-around;
