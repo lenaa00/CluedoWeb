@@ -19,7 +19,7 @@ public class Salle1Model : PageModel
     [BindProperty]
     public string Mot4 { get; set; } = string.Empty;
 
-    // 🔥 ENIGME TRIANGLE
+   
     [BindProperty]
     public string ReponseTriangle { get; set; } = string.Empty;
 
