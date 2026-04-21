@@ -16,14 +16,14 @@
         <div class="filtres-panel">
             <span class="filtres-titre">🔬 Filtres d'élimination</span>
             <div class="filtres-liste">
-                <button class="filtre-btn" id="filtreG" onclick="appliquerFiltre('G')" data-actif="false">
-                    <span class="filtre-icone">✋</span>
-                    <span class="filtre-nom">Gaucher(e)</span>
-                    <span class="filtre-check"></span>
-                </button>
                 <button class="filtre-btn" id="filtreB" onclick="appliquerFiltre('B')" data-actif="false">
                     <span class="filtre-icone">🩸</span>
                     <span class="filtre-nom">Groupe B+</span>
+                    <span class="filtre-check"></span>
+                </button>
+                <button class="filtre-btn" id="filtreG" onclick="appliquerFiltre('G')" data-actif="false">
+                    <span class="filtre-icone">✋</span>
+                    <span class="filtre-nom">Gaucher(e)</span>
                     <span class="filtre-check"></span>
                 </button>
                 <button class="filtre-btn" id="filtreP" onclick="appliquerFiltre('P')" data-actif="false">
@@ -37,11 +37,11 @@
 
         <div class="suspects-grille" id="suspectsGrille">
 
-            <div class="suspect-card" id="s-violet"
+            <div class="suspect-card" id="s-olive"
                  data-groupe="O" data-main="D" data-poids="90">
-                <div class="suspect-photo suspect-violet"></div>
+                <div class="suspect-photo suspect-olive"></div>
                 <div class="suspect-info">
-                    <div class="s-nom">Pr. Violet</div>
+                    <div class="s-nom">M. Olive</div>
                     <div class="s-stats">
                         <span class="stat"><span class="stat-label">Sang</span><span class="stat-val">O+</span></span>
                         <span class="stat"><span class="stat-label">Main</span><span class="stat-val">Droitier</span></span>
@@ -463,7 +463,7 @@
 }
 .suspect-moutarde { background: linear-gradient(160deg, #8b7355 0%, #5a4a30 100%); }
 .suspect-leblanc  { background: linear-gradient(160deg, #f0f2f3 0%, #e2e7ec 100%); }
-.suspect-violet   { background: linear-gradient(160deg, #3da353 0%, #1b691c 100%); }
+.suspect-olive   { background: linear-gradient(160deg, #3da353 0%, #1b691c 100%); }
 .suspect-rose     { background: linear-gradient(160deg, #c08090 0%, #8a5060 100%); }
 
 .suspect-photo::after {
