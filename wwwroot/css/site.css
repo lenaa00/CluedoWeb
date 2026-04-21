@@ -1885,3 +1885,19 @@ body {
     justify-content: space-around;
     align-items: center;
 }
+.autopsie-next {
+    position: absolute;
+    right: 4vw;
+    bottom: 4vh;
+    background: rgba(28,42,53,0.82) !important;
+    border: 1px solid var(--acier-bord) !important;
+    color: var(--neon) !important;
+    box-shadow: 0 0 12px var(--neon-glow) !important;
+}
+
+.autopsie-next:hover {
+    border-color: var(--neon) !important;
+    box-shadow: 0 0 24px var(--neon-glow) !important;
+    color: #fff !important;
+    background: rgba(28,42,53,0.97) !important;
+}
