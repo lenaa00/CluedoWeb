@@ -1,0 +1,795 @@
+@page
+@model CluedoWeb.Pages.SalleArmesModel
+
+<div class="armes-page">
+    <div class="armes-bubble" aria-label="Dialogue de l'inspecteur">
+        <p>Quatre objets retrouvés sur les lieux. L'un d'eux est l'arme du crime.</p>
+    </div>
+
+    <button class="hotspot-arme" style="top:42%;left:18%;" type="button" onclick="ouvrirDetail(1)" aria-label="Examiner le marteau">
+        <span class="arme-badge">1</span>
+    </button>
+    <button class="hotspot-arme" style="top:38%;left:38%;" type="button" onclick="ouvrirDetail(2)" aria-label="Examiner la pioche">
+        <span class="arme-badge">2</span>
+    </button>
+    <button class="hotspot-arme" style="top:44%;left:60%;" type="button" onclick="ouvrirDetail(3)" aria-label="Examiner le couteau">
+        <span class="arme-badge">3</span>
+    </button>
+    <button class="hotspot-arme" style="top:50%;left:80%;" type="button" onclick="ouvrirDetail(4)" aria-label="Examiner le pistolet">
+        <span class="arme-badge">4</span>
+    </button>
+
+    <button class="btn-deduction hidden" id="btnDeduction" type="button" onclick="ouvrirDeduction()" aria-label="Passer à la déduction">
+         Désigner l'arme du crime
+    </button>
+
+    <a href="/Autopsie" class="next-room-button armes-back" aria-label="Retour à l'autopsie">&#8592;</a>
+    <a href="/Meurtrier" class="next-room-button armes-next @(Model.ArmeValidee ? "" : "locked")"
+       aria-label="Passer à la salle des suspects"
+       @(Model.ArmeValidee ? "" : "onclick=\"return false;\"")>&#8594;</a>
+</div>
+
+
+<div id="detailModal" class="modal-armes hidden">
+    <div class="modal-armes-content">
+        <button class="modal-armes-close" type="button" onclick="fermerDetail()">&times;</button>
+
+        <div class="detail-header">
+            <span class="detail-badge" id="detailNumero">1</span>
+            <h2 id="detailNom">Marteau</h2>
+            <span class="detail-statut" id="detailStatut">Non examiné</span>
+        </div>
+
+        <div class="detail-body">
+            <div class="detail-loupe-zone">
+                <div class="detail-arme-icone" id="detailIcone" aria-hidden="true"></div>
+              
+                <div class="loupe-ring" id="loupeRing"></div>
+            </div>
+
+            <div class="detail-panel">
+                <div class="detail-section">
+                    <h3>📋 Observations</h3>
+                    <p id="detailDescription">—</p>
+                </div>
+                <div class="detail-section detail-analyse hidden" id="detailAnalyse">
+                    <h3> Analyse</h3>
+                    <p id="detailRaison">—</p>
+                </div>
+                <button class="btn-analyser" type="button" id="btnAnalyser" onclick="analyserArme()">
+                    Analyser en détail
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="deductionModal" class="modal-armes hidden">
+    <div class="modal-armes-content modal-deduction">
+        <button class="modal-armes-close" type="button" onclick="fermerDeduction()">&times;</button>
+
+        <div class="deduction-header">
+            <h2>Désigner l'arme du crime</h2>
+            <p>Croisez vos observations avec les indices de la scène de crime et de l'autopsie.</p>
+        </div>
+
+        <div class="deduction-indices">
+            <div class="deduction-indice">
+                <span class="di-icone"></span>
+                <span>Blessure à l'épaule — plaie elliptique, profondeur ~12 cm, angle ~35°</span>
+            </div>
+            <div class="deduction-indice">
+                <span class="di-icone"></span>
+                <span>Meurtrier gaucher — trajectoire de droite à gauche</span>
+            </div>
+            <div class="deduction-indice">
+                <span class="di-icone">🧵</span>
+                <span>Fibre textile retrouvée sur l'arme</span>
+            </div>
+        </div>
+
+        <form method="post" asp-page-handler="ValiderArme" class="deduction-form">
+            <div class="deduction-grille" role="group" aria-label="Choisir une arme">
+                @foreach (var arme in Model.Armes)
+                {
+                    var etat = Model.ArmeChoisie == arme.Numero
+                        ? (Model.ArmeValidee ? "is-correct" : "is-incorrect")
+                        : string.Empty;
+
+                    <button type="submit"
+                            name="ArmeChoisie"
+                            value="@arme.Numero"
+                            class="deduction-arme-btn @etat"
+                            data-num="@arme.Numero">
+                        <span class="dab-badge">@arme.Numero</span>
+                        <span class="dab-nom">@arme.Nom</span>
+                        <span class="dab-check" aria-hidden="true"></span>
+                    </button>
+                }
+            </div>
+        </form>
+
+        @if (!string.IsNullOrWhiteSpace(Model.MessageArme))
+        {
+            <p class="armes-feedback @(Model.ArmeValidee ? "feedback-ok" : "feedback-ko")">
+                @Model.MessageArme
+            </p>
+        }
+
+        @if (Model.ArmeValidee)
+        {
+            <div class="revealed-arme-clue">
+                <h3>Arme du crime identifiée</h3>
+                <p>La pioche n°2. Les fibres textiles correspondent à la veste de l'un des suspects. Rendez-vous dans la salle des suspects pour confronter les preuves.</p>
+            </div>
+        }
+    </div>
+</div>
+
+
+@{
+    var ouvrirDedBool = Model.OuvrirDeduction ? "true" : "false";
+}
+
+<script>
+    var armesData = {
+        1: {
+            nom: "Marteau",
+            description: "Un marteau de charpentier. Tête lourde en acier, manche en bois vieilli. Aucune trace suspecte visible.",
+            raison: "Poids estimé : 800g. Surface de frappe plane — incompatible avec la forme elliptique de la blessure à l'épaule.",
+            icone: "marteau"
+        },
+        2: {
+            nom: "Pioche",
+            description: "Une pioche de terrassier. Tête bifide en acier forgé, manche en frêne. Légères traces de terre séchée.",
+            raison: "Poids estimé : 1,4 kg. Pointe acérée — correspond à la profondeur et l'angle de 35° de la plaie. Traces de fibre textile sur la pointe.",
+            icone: "pioche"
+        },
+        3: {
+            nom: "Couteau",
+            description: "Un couteau de chasse à lame fixe. Manche en bois de cerf, étui en cuir. Lame affûtée.",
+            raison: "Lame de 18 cm — trop courte pour atteindre l'épaule depuis l'arrière sans contact rapproché. Incohérent avec la distance estimée.",
+            icone: "couteau"
+        },
+        4: {
+            nom: "Pistolet",
+            description: "Un revolver ancien, calibre .38. Barillet chargé à blanc. Canon propre, sans résidu de poudre récent.",
+            raison: "Aucun résidu de déflagration. La victime ne présente aucune brûlure ni blessure par balle. Écarté.",
+            icone: "pistolet"
+        }
+    };
+
+    var examinees = new Set();
+    var armeEnCours = null;
+    var analyseeFaite = false;
+
+    function ouvrirDetail(num) {
+        armeEnCours = num;
+        analyseeFaite = false;
+        var data = armesData[num];
+
+        document.getElementById('detailNumero').textContent = num;
+        document.getElementById('detailNom').textContent = data.nom;
+        document.getElementById('detailDescription').textContent = data.description;
+        document.getElementById('detailRaison').textContent = data.raison;
+        document.getElementById('detailStatut').textContent = 'En cours d\'examen';
+        document.getElementById('detailStatut').className = 'detail-statut en-cours';
+        document.getElementById('detailAnalyse').classList.add('hidden');
+        document.getElementById('btnAnalyser').disabled = false;
+        document.getElementById('btnAnalyser').textContent = 'Analyser en détail';
+
+        var icone = document.getElementById('detailIcone');
+        icone.className = 'detail-arme-icone icone-' + data.icone;
+
+        document.getElementById('detailModal').classList.remove('hidden');
+    }
+
+    function fermerDetail() {
+        document.getElementById('detailModal').classList.add('hidden');
+    }
+
+    function analyserArme() {
+        if (!armeEnCours) return;
+        analyseeFaite = true;
+        examinees.add(armeEnCours);
+
+        document.getElementById('detailAnalyse').classList.remove('hidden');
+        document.getElementById('detailStatut').textContent = 'Analysé ✓';
+        document.getElementById('detailStatut').className = 'detail-statut analysee';
+        document.getElementById('btnAnalyser').disabled = true;
+        document.getElementById('btnAnalyser').textContent = 'Analyse effectuée';
+
+        var hotspots = document.querySelectorAll('.hotspot-arme');
+        hotspots.forEach(function(h, i) {
+            if (i + 1 === armeEnCours) h.classList.add('examined');
+        });
+
+        if (examinees.size >= 4) {
+            document.getElementById('btnDeduction').classList.remove('hidden');
+        }
+    }
+
+
+    function ouvrirDeduction() {
+        document.getElementById('deductionModal').classList.remove('hidden');
+    }
+    function fermerDeduction() {
+        document.getElementById('deductionModal').classList.add('hidden');
+    }
+
+   
+    document.addEventListener('DOMContentLoaded', function () {
+        ['detailModal', 'deductionModal'].forEach(function(id) {
+            var m = document.getElementById(id);
+            m.addEventListener('click', function(e) {
+                if (e.target === m) m.classList.add('hidden');
+            });
+        });
+
+        var ouvrirDed = @ouvrirDedBool;
+        if (ouvrirDed) {
+            document.getElementById('btnDeduction').classList.remove('hidden');
+            ouvrirDeduction();
+        }
+
+        var next = document.querySelector('.armes-next');
+        if (next && next.classList.contains('locked')) {
+            next.style.opacity = '0.3';
+            next.style.cursor = 'not-allowed';
+            next.title = 'Identifiez d\'abord l\'arme du crime';
+        }
+    });
+</script>
+
+
+<style>
+:root {
+    --acier:       #1c2a35;
+    --acier-clair: #263545;
+    --acier-bord:  #344d5e;
+    --neon:        #4fc3f7;
+    --neon-glow:   rgba(79,195,247,0.35);
+    --blanc-froid: #e8eef2;
+    --gris-metal:  #8fa4b2;
+    --rouge-sang:  #c0392b;
+    --vert-ok:     #00c896;
+    --vert-ok-bg:  rgba(0,200,150,0.12);
+    --rouge-ko:    #e74c3c;
+    --rouge-ko-bg: rgba(231,76,60,0.12);
+    --texte:       #ccd8e0;
+    --texte-dim:   #6e8a99;
+    --font-mono:   'Courier New', Courier, monospace;
+}
+
+.armes-page {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    background-image: url('/images/armes.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.armes-bubble {
+    position: absolute;
+    bottom: 18vh;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(10,18,24,0.82);
+    border: 1px solid var(--acier-bord);
+    border-radius: 6px;
+    padding: 0.75rem 1.4rem;
+    text-align: center;
+    max-width: 480px;
+    box-shadow: 0 0 20px var(--neon-glow);
+}
+.armes-bubble::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--neon), transparent);
+    border-radius: 6px 6px 0 0;
+}
+.armes-bubble p {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--texte);
+    letter-spacing: 0.03em;
+}
+
+.hotspot-arme {
+    position: absolute;
+    transform: translateX(-50%);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(10,18,24,0.75);
+    border: 2px solid var(--acier-bord);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    z-index: 10;
+}
+.hotspot-arme:hover {
+    border-color: var(--neon);
+    box-shadow: 0 0 20px var(--neon-glow);
+    background: rgba(10,18,24,0.92);
+}
+.hotspot-arme.examined {
+    border-color: var(--vert-ok);
+    box-shadow: 0 0 14px rgba(0,200,150,0.3);
+}
+.arme-badge {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--neon);
+}
+.hotspot-arme.examined .arme-badge {
+    color: var(--vert-ok);
+}
+
+.btn-deduction {
+    position: absolute;
+    bottom: 10vh;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.85rem 2rem;
+    background: transparent;
+    border: 1px solid var(--neon);
+    border-radius: 4px;
+    color: var(--neon);
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 0.88rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 0 20px var(--neon-glow);
+    z-index: 10;
+    transition: background 0.2s, box-shadow 0.2s;
+    animation: pulse-neon 2s ease-in-out infinite;
+}
+.btn-deduction:hover {
+    background: rgba(79,195,247,0.1);
+    box-shadow: 0 0 36px var(--neon-glow);
+}
+@@keyframes pulse-neon {
+    0%, 100% { box-shadow: 0 0 16px var(--neon-glow); }
+    50%       { box-shadow: 0 0 32px var(--neon-glow), 0 0 8px var(--neon); }
+}
+
+.armes-back {
+    position: absolute;
+    left: 4vw;
+    bottom: 4vh;
+    background: rgba(28,42,53,0.82) !important;
+    border: 1px solid var(--acier-bord) !important;
+    color: var(--neon) !important;
+    box-shadow: 0 0 12px var(--neon-glow) !important;
+}
+.armes-next {
+    position: absolute;
+    right: 4vw;
+    bottom: 4vh;
+    background: rgba(28,42,53,0.82) !important;
+    border: 1px solid var(--acier-bord) !important;
+    color: var(--neon) !important;
+    box-shadow: 0 0 12px var(--neon-glow) !important;
+}
+
+.modal-armes {
+    position: fixed;
+    inset: 0;
+    background: rgba(5,10,14,0.93);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 1rem;
+    backdrop-filter: blur(4px);
+}
+.modal-armes.hidden { display: none; }
+
+.modal-armes-content {
+    position: relative;
+    background: var(--acier);
+    border: 1px solid var(--acier-bord);
+    border-radius: 6px;
+    padding: 2rem;
+    width: min(860px, 94vw);
+    max-height: 92vh;
+    overflow-y: auto;
+    box-shadow: 0 0 0 1px rgba(79,195,247,0.06), 0 30px 80px rgba(0,0,0,0.7);
+}
+.modal-armes-content::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--neon), transparent);
+    border-radius: 6px 6px 0 0;
+}
+
+.modal-armes-close {
+    position: absolute;
+    top: 0.75rem; right: 0.75rem;
+    background: transparent;
+    border: 1px solid var(--acier-bord);
+    color: var(--gris-metal);
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    cursor: pointer;
+    width: 32px; height: 32px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.2s, color 0.2s, box-shadow 0.2s;
+}
+.modal-armes-close:hover {
+    border-color: var(--rouge-sang);
+    color: var(--rouge-sang);
+    box-shadow: 0 0 10px rgba(192,57,43,0.5);
+}
+
+.detail-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--acier-bord);
+}
+.detail-badge {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 2px solid var(--neon);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--neon);
+    flex-shrink: 0;
+    box-shadow: 0 0 10px var(--neon-glow);
+}
+.detail-header h2 {
+    margin: 0;
+    font-family: var(--font-mono);
+    color: var(--blanc-froid);
+    font-size: 1.1rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    flex: 1;
+}
+.detail-statut {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.3rem 0.7rem;
+    border-radius: 3px;
+    border: 1px solid var(--acier-bord);
+    color: var(--texte-dim);
+}
+.detail-statut.en-cours { color: var(--neon);    border-color: var(--neon); }
+.detail-statut.analysee { color: var(--vert-ok); border-color: var(--vert-ok); }
+
+.detail-body {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+.detail-loupe-zone {
+    position: relative;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid var(--acier-bord);
+    border-radius: 4px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 180px;
+}
+
+.detail-arme-icone {
+    position: relative;
+    width: 120px;
+    height: 120px;
+}
+
+.icone-marteau::before {
+    content: '';
+    position: absolute;
+    top: 50px; left: 52px;
+    width: 16px; height: 60px;
+    background: linear-gradient(90deg, #5a3a28, #3a2018);
+    border-radius: 3px;
+}
+.icone-marteau::after {
+    content: '';
+    position: absolute;
+    top: 28px; left: 38px;
+    width: 44px; height: 28px;
+    background: linear-gradient(135deg, #8fa8b8, #4a6878);
+    border-radius: 4px;
+    box-shadow: 0 0 8px rgba(79,195,247,0.2);
+}
+
+/* Pioche */
+.icone-pioche::before {
+    content: '';
+    position: absolute;
+    top: 55px; left: 52px;
+    width: 14px; height: 55px;
+    background: linear-gradient(90deg, #4a3828, #2e2018);
+    border-radius: 3px;
+}
+.icone-pioche::after {
+    content: '';
+    position: absolute;
+    top: 22px; left: 20px;
+    width: 80px; height: 14px;
+    background: linear-gradient(90deg, #7a9aaa, #4a6a7a);
+    border-radius: 2px;
+    transform: rotate(-10deg);
+    clip-path: polygon(0% 30%, 18% 0%, 82% 0%, 100% 30%, 82% 100%, 18% 100%);
+    box-shadow: 0 0 10px rgba(231,76,60,0.3);
+}
+
+/* Couteau */
+.icone-couteau::before {
+    content: '';
+    position: absolute;
+    top: 56px; left: 15px;
+    width: 60px; height: 10px;
+    background: linear-gradient(90deg, #b0c8d8, #4a6a7a);
+    clip-path: polygon(0% 0%, 85% 0%, 100% 50%, 85% 100%, 0% 100%);
+    box-shadow: 0 0 6px rgba(79,195,247,0.2);
+}
+.icone-couteau::after {
+    content: '';
+    position: absolute;
+    top: 52px; left: 72px;
+    width: 34px; height: 18px;
+    background: linear-gradient(90deg, #5a3828, #3a2018);
+    border-radius: 4px;
+}
+
+.icone-pistolet::before {
+    content: '';
+    position: absolute;
+    top: 50px; left: 20px;
+    width: 65px; height: 12px;
+    background: linear-gradient(90deg, #6a8090, #2a3a48);
+    border-radius: 2px;
+}
+.icone-pistolet::after {
+    content: '';
+    position: absolute;
+    top: 48px; left: 72px;
+    width: 28px; height: 36px;
+    background: linear-gradient(160deg, #3a5060, #1e2e38);
+    border-radius: 3px 3px 8px 8px;
+}
+
+.loupe-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 4px;
+    border: 1px solid rgba(79,195,247,0.15);
+    pointer-events: none;
+    animation: scan 3s linear infinite;
+    background: linear-gradient(180deg, rgba(79,195,247,0.03) 0%, transparent 50%);
+}
+@@keyframes scan {
+    0%   { background-position: 0 -100%; }
+    100% { background-position: 0 200%; }
+}
+
+.detail-panel { color: var(--texte); }
+
+.detail-section {
+    margin-bottom: 1rem;
+    padding: 0.9rem 1rem;
+    background: rgba(0,0,0,0.2);
+    border: 1px solid var(--acier-bord);
+    border-radius: 4px;
+}
+.detail-section h3 {
+    margin: 0 0 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--gris-metal);
+}
+.detail-section p {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--texte);
+}
+.detail-analyse { border-color: rgba(231,76,60,0.3) !important; }
+.detail-analyse h3 { color: var(--rouge-ko) !important; }
+
+.btn-analyser {
+    display: block;
+    width: 100%;
+    padding: 0.75rem;
+    background: transparent;
+    border: 1px solid var(--neon);
+    border-radius: 3px;
+    color: var(--neon);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 0 12px var(--neon-glow);
+    transition: background 0.2s, box-shadow 0.2s;
+}
+.btn-analyser:hover:not(:disabled) {
+    background: rgba(79,195,247,0.08);
+    box-shadow: 0 0 24px var(--neon-glow);
+}
+.btn-analyser:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.modal-deduction {
+    width: min(760px, 94vw);
+}
+
+.deduction-header {
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--acier-bord);
+}
+.deduction-header h2 {
+    margin: 0 0 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--neon);
+}
+.deduction-header p {
+    margin: 0;
+    font-size: 0.88rem;
+    color: var(--texte-dim);
+}
+
+.deduction-indices {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.3rem;
+    border-left: 2px solid var(--acier-bord);
+    padding-left: 0.9rem;
+}
+.deduction-indice {
+    display: flex;
+    gap: 0.6rem;
+    font-size: 0.88rem;
+    color: var(--texte);
+    line-height: 1.5;
+}
+.di-icone { flex-shrink: 0; }
+
+.deduction-grille {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.deduction-arme-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.85rem 1rem;
+    background: rgba(0,0,0,0.2);
+    border: 1px solid var(--acier-bord);
+    border-radius: 4px;
+    color: var(--texte);
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    text-align: left;
+}
+.deduction-arme-btn:hover {
+    border-color: var(--neon);
+    background: rgba(79,195,247,0.05);
+    box-shadow: 0 0 16px var(--neon-glow);
+}
+.deduction-arme-btn.is-correct {
+    border-color: var(--vert-ok);
+    background: var(--vert-ok-bg);
+    box-shadow: 0 0 20px rgba(0,200,150,0.2);
+}
+.deduction-arme-btn.is-incorrect {
+    border-color: var(--rouge-ko);
+    background: var(--rouge-ko-bg);
+    box-shadow: 0 0 16px rgba(231,76,60,0.15);
+}
+
+.dab-badge {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    border: 1px solid var(--neon);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--neon);
+    flex-shrink: 0;
+}
+.dab-nom {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    flex: 1;
+}
+.dab-check { font-size: 1.1rem; }
+.is-correct .dab-check::after { content: '✓'; color: var(--vert-ok); }
+.is-incorrect .dab-check::after { content: '✗'; color: var(--rouge-ko); }
+
+.armes-feedback {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    border-radius: 3px;
+    padding: 0.65rem 0.9rem;
+    border-left: 3px solid;
+    letter-spacing: 0.03em;
+    margin-bottom: 0.8rem;
+}
+.feedback-ok { background: var(--vert-ok-bg); color: var(--vert-ok); border-color: var(--vert-ok); }
+.feedback-ko { background: var(--rouge-ko-bg); color: var(--rouge-ko); border-color: var(--rouge-ko); }
+
+.revealed-arme-clue {
+    padding: 1rem 1.1rem;
+    border-radius: 3px;
+    background: rgba(0,200,150,0.07);
+    border-left: 3px solid var(--vert-ok);
+    box-shadow: 0 0 16px rgba(0,200,150,0.08);
+}
+.revealed-arme-clue h3 {
+    margin: 0 0 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--vert-ok);
+}
+.revealed-arme-clue p { color: var(--texte); margin: 0; }
+
+@@media (max-width: 768px) {
+    .detail-body {
+        grid-template-columns: 1fr;
+    }
+    .detail-loupe-zone { min-height: 140px; }
+    .deduction-grille { grid-template-columns: 1fr; }
+}
+
+@@media (max-width: 480px) {
+    .modal-armes-content { padding: 1.1rem; }
+    .btn-deduction { font-size: 0.78rem; padding: 0.7rem 1.2rem; }
+}
+</style>
