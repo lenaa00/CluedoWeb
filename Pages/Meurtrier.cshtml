@@ -37,34 +37,6 @@
 
         <div class="suspects-grille" id="suspectsGrille">
 
-            <div class="suspect-card" id="s-moutarde"
-                 data-groupe="A" data-main="D" data-poids="94">
-                <div class="suspect-photo suspect-moutarde"></div>
-                <div class="suspect-info">
-                    <div class="s-nom">Col. Moutarde</div>
-                    <div class="s-stats">
-                        <span class="stat"><span class="stat-label">Sang</span><span class="stat-val">A−</span></span>
-                        <span class="stat"><span class="stat-label">Main</span><span class="stat-val">Droitier</span></span>
-                        <span class="stat"><span class="stat-label">Poids</span><span class="stat-val">94 kg</span></span>
-                    </div>
-                </div>
-                <div class="suspect-croix" aria-hidden="true">✕</div>
-            </div>
-
-            <div class="suspect-card" id="s-leblanc"
-                 data-groupe="B" data-main="G" data-poids="62">
-                <div class="suspect-photo suspect-leblanc"></div>
-                <div class="suspect-info">
-                    <div class="s-nom">Mme Leblanc</div>
-                    <div class="s-stats">
-                        <span class="stat"><span class="stat-label">Sang</span><span class="stat-val">B+</span></span>
-                        <span class="stat"><span class="stat-label">Main</span><span class="stat-val">Gauchère</span></span>
-                        <span class="stat"><span class="stat-label">Poids</span><span class="stat-val">62 kg</span></span>
-                    </div>
-                </div>
-                <div class="suspect-croix" aria-hidden="true">✕</div>
-            </div>
-
             <div class="suspect-card" id="s-violet"
                  data-groupe="O" data-main="D" data-poids="78">
                 <div class="suspect-photo suspect-violet"></div>
@@ -73,7 +45,7 @@
                     <div class="s-stats">
                         <span class="stat"><span class="stat-label">Sang</span><span class="stat-val">O+</span></span>
                         <span class="stat"><span class="stat-label">Main</span><span class="stat-val">Droitier</span></span>
-                        <span class="stat"><span class="stat-label">Poids</span><span class="stat-val">78 kg</span></span>
+                        <span class="stat"><span class="stat-label">Poids</span><span class="stat-val">90 kg</span></span>
                     </div>
                 </div>
                 <div class="suspect-croix" aria-hidden="true">✕</div>
@@ -87,12 +59,44 @@
                     <div class="s-stats">
                         <span class="stat"><span class="stat-label">Sang</span><span class="stat-val">B+</span></span>
                         <span class="stat"><span class="stat-label">Main</span><span class="stat-val">Droitière</span></span>
-                        <span class="stat"><span class="stat-label">Poids</span><span class="stat-val">71 kg</span></span>
+                        <span class="stat"><span class="stat-label">Poids</span><span class="stat-val">67 kg</span></span>
                     </div>
                 </div>
                 <div class="suspect-croix" aria-hidden="true">✕</div>
             </div>
 
+
+            <div class="suspect-card" id="s-moutarde"
+                 data-groupe="A" data-main="D" data-poids="94">
+                <div class="suspect-photo suspect-moutarde"></div>
+                <div class="suspect-info">
+                    <div class="s-nom">Col. Moutarde</div>
+                    <div class="s-stats">
+                        <span class="stat"><span class="stat-label">Sang</span><span class="stat-val">A−</span></span>
+                        <span class="stat"><span class="stat-label">Main</span><span class="stat-val">Droitier</span></span>
+                        <span class="stat"><span class="stat-label">Poids</span><span class="stat-val">80 kg</span></span>
+                    </div>
+                </div>
+                <div class="suspect-croix" aria-hidden="true">✕</div>
+            </div>
+
+            <div class="suspect-card" id="s-leblanc"
+                 data-groupe="B" data-main="G" data-poids="62">
+                <div class="suspect-photo suspect-leblanc"></div>
+                <div class="suspect-info">
+                    <div class="s-nom">Mme Leblanc</div>
+                    <div class="s-stats">
+                        <span class="stat"><span class="stat-label">Sang</span><span class="stat-val">B+</span></span>
+                        <span class="stat"><span class="stat-label">Main</span><span class="stat-val">Gauchère</span></span>
+                        <span class="stat"><span class="stat-label">Poids</span><span class="stat-val">75 kg</span></span>
+                    </div>
+                </div>
+                <div class="suspect-croix" aria-hidden="true">✕</div>
+            </div>
+
+            
+
+            
         </div>
 
         <button class="btn-accuser hidden" id="btnAccuser" onclick="ouvrirBalance()">
@@ -303,7 +307,7 @@
 }
 
 .note-legiste {
-    margin-top: 6vh;
+    margin-top: 45vh;
     max-width: 560px;
     width: 100%;
 }
@@ -362,7 +366,7 @@
     flex-direction: column;
     align-items: center;
     gap: 1.5rem;
-    margin-top: 4vh;
+    margin-top: 43vh;
 }
 
 .filtres-panel {
@@ -446,8 +450,8 @@
     background-position: center top;
 }
 .suspect-moutarde { background: linear-gradient(160deg, #8b7355 0%, #5a4a30 100%); }
-.suspect-leblanc  { background: linear-gradient(160deg, #9aa8b0 0%, #5a6a78 100%); }
-.suspect-violet   { background: linear-gradient(160deg, #7a5a8a 0%, #4a3a58 100%); }
+.suspect-leblanc  { background: linear-gradient(160deg, #f0f2f3 0%, #e2e7ec 100%); }
+.suspect-violet   { background: linear-gradient(160deg, #3da353 0%, #1b691c 100%); }
 .suspect-rose     { background: linear-gradient(160deg, #c08090 0%, #8a5060 100%); }
 
 .suspect-photo::after {
