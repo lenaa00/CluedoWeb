@@ -1,0 +1,779 @@
+@page
+@model CluedoWeb.Pages.MeurtrierModel
+
+<div class="meurtrier-page">
+
+    <div class="note-legiste" id="noteLegiste">
+        <div class="note-inner">
+            <span class="note-label">📋 Note du légiste</span>
+            <p>Le groupe <strong>B+</strong> ne correspond pas à la victime (groupe A−). Une égratignure sur le bord de la table suggère que l'agresseur s'est blessé en frappant. <em>Ce sang est celui du meurtrier.</em></p>
+            <button class="btn-note-ok" onclick="afficherSuspects()">Croiser les données →</button>
+        </div>
+    </div>
+
+    <div class="enquete-phase hidden" id="enquetePhase">
+
+        <div class="filtres-panel">
+            <span class="filtres-titre">🔬 Filtres d'élimination</span>
+            <div class="filtres-liste">
+                <button class="filtre-btn" id="filtreB" onclick="appliquerFiltre('B')" data-actif="false">
+                    <span class="filtre-icone">🩸</span>
+                    <span class="filtre-nom">Groupe B+</span>
+                    <span class="filtre-check"></span>
+                </button>
+                <button class="filtre-btn" id="filtreG" onclick="appliquerFiltre('G')" data-actif="false">
+                    <span class="filtre-icone">✋</span>
+                    <span class="filtre-nom">Gaucher(e)</span>
+                    <span class="filtre-check"></span>
+                </button>
+                <button class="filtre-btn" id="filtreP" onclick="appliquerFiltre('P')" data-actif="false">
+                    <span class="filtre-icone">⚖️</span>
+                    <span class="filtre-nom">Poids &lt; 70 kg</span>
+                    <span class="filtre-check"></span>
+                </button>
+            </div>
+            <p class="filtres-hint" id="filtresHint">Appliquez les filtres pour éliminer les suspects.</p>
+        </div>
+
+        <div class="suspects-grille" id="suspectsGrille">
+
+            <div class="suspect-card" id="s-moutarde"
+                 data-groupe="A" data-main="D" data-poids="94">
+                <div class="suspect-photo suspect-moutarde"></div>
+                <div class="suspect-info">
+                    <div class="s-nom">Col. Moutarde</div>
+                    <div class="s-stats">
+                        <span class="stat"><span class="stat-label">Sang</span><span class="stat-val">A−</span></span>
+                        <span class="stat"><span class="stat-label">Main</span><span class="stat-val">Droitier</span></span>
+                        <span class="stat"><span class="stat-label">Poids</span><span class="stat-val">94 kg</span></span>
+                    </div>
+                </div>
+                <div class="suspect-croix" aria-hidden="true">✕</div>
+            </div>
+
+            <div class="suspect-card" id="s-leblanc"
+                 data-groupe="B" data-main="G" data-poids="62">
+                <div class="suspect-photo suspect-leblanc"></div>
+                <div class="suspect-info">
+                    <div class="s-nom">Mme Leblanc</div>
+                    <div class="s-stats">
+                        <span class="stat"><span class="stat-label">Sang</span><span class="stat-val">B+</span></span>
+                        <span class="stat"><span class="stat-label">Main</span><span class="stat-val">Gauchère</span></span>
+                        <span class="stat"><span class="stat-label">Poids</span><span class="stat-val">62 kg</span></span>
+                    </div>
+                </div>
+                <div class="suspect-croix" aria-hidden="true">✕</div>
+            </div>
+
+            <div class="suspect-card" id="s-violet"
+                 data-groupe="O" data-main="D" data-poids="78">
+                <div class="suspect-photo suspect-violet"></div>
+                <div class="suspect-info">
+                    <div class="s-nom">Pr. Violet</div>
+                    <div class="s-stats">
+                        <span class="stat"><span class="stat-label">Sang</span><span class="stat-val">O+</span></span>
+                        <span class="stat"><span class="stat-label">Main</span><span class="stat-val">Droitier</span></span>
+                        <span class="stat"><span class="stat-label">Poids</span><span class="stat-val">78 kg</span></span>
+                    </div>
+                </div>
+                <div class="suspect-croix" aria-hidden="true">✕</div>
+            </div>
+
+            <div class="suspect-card" id="s-rose"
+                 data-groupe="B" data-main="D" data-poids="71">
+                <div class="suspect-photo suspect-rose"></div>
+                <div class="suspect-info">
+                    <div class="s-nom">Mlle Rose</div>
+                    <div class="s-stats">
+                        <span class="stat"><span class="stat-label">Sang</span><span class="stat-val">B+</span></span>
+                        <span class="stat"><span class="stat-label">Main</span><span class="stat-val">Droitière</span></span>
+                        <span class="stat"><span class="stat-label">Poids</span><span class="stat-val">71 kg</span></span>
+                    </div>
+                </div>
+                <div class="suspect-croix" aria-hidden="true">✕</div>
+            </div>
+
+        </div>
+
+        <button class="btn-accuser hidden" id="btnAccuser" onclick="ouvrirBalance()">
+            ⚖️ Confirmer le poids et accuser
+        </button>
+
+    </div><
+
+</div><
+
+
+<div id="balanceModal" class="modal-m hidden">
+    <div class="modal-m-content balance-modal">
+        <div class="balance-header">
+            <h2>⚖️ Confirmation du poids</h2>
+            <p>L'empreinte de pression relevée sur la table d'autopsie indique une masse corporelle précise. Entrez le poids du suspect restant pour finaliser l'accusation.</p>
+        </div>
+
+        <div class="balance-visuelle">
+            <div class="balance-plateau">
+                <div class="balance-aiguille" id="balanceAiguille"></div>
+            </div>
+            <div class="balance-graduation">
+                <span>40</span><span>50</span><span>60</span><span>70</span><span>80</span><span>90</span><span>100</span>
+            </div>
+        </div>
+
+        <div class="balance-input-zone">
+            <label class="balance-label" for="poidsInput">Poids estimé (kg)</label>
+            <div class="balance-input-row">
+                <input type="number" id="poidsInput" class="balance-input"
+                       min="40" max="100" placeholder="— kg"
+                       oninput="majAiguille(this.value)" />
+                <span class="balance-unit">kg</span>
+            </div>
+        </div>
+
+        <form method="post" asp-page-handler="Accuser">
+            <input type="hidden" name="PoidsSaisi" id="poidsSaisiHidden" value="0" />
+            <button type="submit" class="btn-confirmer" id="btnConfirmer" onclick="syncPoids()">
+                Accuser formellement
+            </button>
+        </form>
+    </div>
+</div>
+
+@if (Model.AccusationFaite)
+{
+    <div class="fin-overlay" id="finOverlay">
+        <div class="fin-content">
+            @if (Model.BonneAccusation)
+            {
+                <div class="fin-victoire">
+                    <div class="fin-icone">🎉</div>
+                    <h1>Affaire résolue !</h1>
+                    <p class="fin-sous-titre">Vous avez identifié le meurtrier.</p>
+                    <div class="fin-recap">
+                        <div class="fin-recap-ligne"><span>Coupable</span><strong>Mme Leblanc</strong></div>
+                        <div class="fin-recap-ligne"><span>Arme</span><strong>La pioche</strong></div>
+                        <div class="fin-recap-ligne"><span>Indice clé</span><strong>Groupe B+, gauchère, 62 kg</strong></div>
+                    </div>
+                    <a href="/" class="btn-fin">↩ Nouvelle enquête</a>
+                </div>
+            }
+            else
+            {
+                <div class="fin-echec">
+                    <div class="fin-icone">❌</div>
+                    <h1>Mauvaise accusation</h1>
+                    <p class="fin-sous-titre">@Model.MessageFin</p>
+                    <p class="fin-indice">Relisez les indices : groupe B+, main gauche, 62 kg.</p>
+                    <div class="fin-actions">
+                        <button class="btn-fin btn-fin-retry" onclick="recommencer()">↺ Réessayer</button>
+                        <a href="/" class="btn-fin btn-fin-home">↩ Accueil</a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+
+<script>
+    var BONNE_REPONSE_POIDS = 62;
+    var filtresActifs = { B: false, G: false, P: false };
+
+    var reglesElimination = {
+        B: ['s-moutarde', 's-violet'],
+        G: ['s-rose'],
+        P: ['s-moutarde', 's-violet', 's-rose']
+    };
+
+    function afficherSuspects() {
+        document.getElementById('noteLegiste').classList.add('hidden');
+        document.getElementById('enquetePhase').classList.remove('hidden');
+    }
+
+    function appliquerFiltre(code) {
+        filtresActifs[code] = !filtresActifs[code];
+        var btn = document.getElementById('filtre' + code);
+        btn.classList.toggle('actif', filtresActifs[code]);
+
+        var cartes = document.querySelectorAll('.suspect-card');
+        cartes.forEach(function (c) { c.classList.remove('elimine'); });
+
+        ['B', 'G', 'P'].forEach(function (f) {
+            if (filtresActifs[f]) {
+                reglesElimination[f].forEach(function (id) {
+                    var el = document.getElementById(id);
+                    if (el) el.classList.add('elimine');
+                });
+            }
+        });
+
+        majHint();
+        verifierUnSeulReste();
+    }
+
+    function majHint() {
+        var actifs = Object.values(filtresActifs).filter(Boolean).length;
+        var hints = [
+            "Appliquez les filtres pour éliminer les suspects.",
+            "Bon début. Continuez à croiser les données.",
+            "Presque. Un dernier filtre devrait isoler le coupable.",
+            "Un seul suspect correspond à tous les critères."
+        ];
+        document.getElementById('filtresHint').textContent = hints[actifs] || hints[0];
+    }
+
+    function verifierUnSeulReste() {
+        var restants = document.querySelectorAll('.suspect-card:not(.elimine)');
+        if (restants.length === 1) {
+            document.getElementById('btnAccuser').classList.remove('hidden');
+        } else {
+            document.getElementById('btnAccuser').classList.add('hidden');
+        }
+    }
+
+    function ouvrirBalance() {
+        document.getElementById('balanceModal').classList.remove('hidden');
+    }
+
+    function majAiguille(val) {
+        var v = parseInt(val) || 40;
+        v = Math.min(Math.max(v, 40), 100);
+        var deg = -45 + ((v - 40) / 60) * 90;
+        document.getElementById('balanceAiguille').style.transform = 'rotate(' + deg + 'deg)';
+    }
+
+    function syncPoids() {
+        var val = document.getElementById('poidsInput').value;
+        document.getElementById('poidsSaisiHidden').value = val;
+    }
+
+    function recommencer() {
+        document.getElementById('finOverlay').classList.add('hidden');
+        document.getElementById('enquetePhase').classList.remove('hidden');
+    }
+
+    // ── Init ──
+    document.addEventListener('DOMContentLoaded', function () {
+        var overlay = document.getElementById('finOverlay');
+        if (overlay) overlay.classList.remove('hidden');
+
+        var bm = document.getElementById('balanceModal');
+        if (bm) {
+            bm.addEventListener('click', function (e) {
+                if (e.target === bm) bm.classList.add('hidden');
+            });
+        }
+    });
+</script>
+
+
+<style>
+:root {
+    --acier:       #1c2a35;
+    --acier-bord:  #344d5e;
+    --neon:        #4fc3f7;
+    --neon-glow:   rgba(79,195,247,0.35);
+    --blanc-froid: #e8eef2;
+    --gris-metal:  #8fa4b2;
+    --rouge-sang:  #c0392b;
+    --rouge-elim:  rgba(192,57,43,0.85);
+    --vert-ok:     #00c896;
+    --vert-ok-bg:  rgba(0,200,150,0.12);
+    --rouge-ko:    #e74c3c;
+    --rouge-ko-bg: rgba(231,76,60,0.12);
+    --texte:       #ccd8e0;
+    --texte-dim:   #6e8a99;
+    --font-mono:   'Courier New', Courier, monospace;
+    --gold:        #d4a843;
+}
+
+/* ─── PAGE ─── */
+.meurtrier-page {
+    position: relative;
+    min-height: 100vh;
+    width: 100%;
+    background-image: url('/images/meurtrier.png');
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem 4rem;
+}
+
+.note-legiste {
+    margin-top: 6vh;
+    max-width: 560px;
+    width: 100%;
+}
+.note-inner {
+    background: rgba(10,18,24,0.92);
+    border: 1px solid var(--gold);
+    border-radius: 6px;
+    padding: 1.6rem 1.8rem;
+    box-shadow: 0 0 40px rgba(212,168,67,0.2);
+    position: relative;
+}
+.note-inner::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    border-radius: 6px 6px 0 0;
+}
+.note-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    margin-bottom: 0.8rem;
+}
+.note-inner p {
+    font-size: 0.92rem;
+    color: var(--texte);
+    line-height: 1.7;
+    margin: 0 0 1.2rem;
+}
+.note-inner strong { color: var(--rouge-ko); }
+.note-inner em     { color: var(--neon); font-style: normal; }
+.btn-note-ok {
+    display: block; width: 100%;
+    padding: 0.7rem;
+    background: transparent;
+    border: 1px solid var(--gold);
+    border-radius: 3px;
+    color: var(--gold);
+    font-family: var(--font-mono);
+    font-size: 0.82rem; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s;
+    box-shadow: 0 0 14px rgba(212,168,67,0.15);
+}
+.btn-note-ok:hover { background: rgba(212,168,67,0.08); box-shadow: 0 0 28px rgba(212,168,67,0.25); }
+
+.enquete-phase {
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 4vh;
+}
+
+.filtres-panel {
+    width: 100%;
+    background: rgba(10,18,24,0.88);
+    border: 1px solid var(--acier-bord);
+    border-radius: 6px;
+    padding: 1.2rem 1.4rem;
+    box-shadow: 0 0 20px var(--neon-glow);
+}
+.filtres-titre {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--gris-metal);
+    margin-bottom: 0.9rem;
+}
+.filtres-liste {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+.filtre-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    background: transparent;
+    border: 1px solid var(--acier-bord);
+    border-radius: 4px;
+    color: var(--texte);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+.filtre-btn:hover {
+    border-color: var(--neon);
+    box-shadow: 0 0 12px var(--neon-glow);
+}
+.filtre-btn.actif {
+    border-color: var(--rouge-ko);
+    background: rgba(231,76,60,0.1);
+    color: var(--rouge-ko);
+    box-shadow: 0 0 14px rgba(231,76,60,0.2);
+}
+.filtre-btn.actif .filtre-check::after { content: ' ✓'; }
+.filtres-hint {
+    margin: 0.8rem 0 0;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--texte-dim);
+    font-style: italic;
+}
+
+.suspects-grille {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    width: 100%;
+}
+
+.suspect-card {
+    position: relative;
+    background: rgba(10,18,24,0.88);
+    border: 1px solid var(--acier-bord);
+    border-radius: 6px;
+    overflow: hidden;
+    transition: border-color 0.3s, opacity 0.4s, box-shadow 0.3s;
+}
+.suspect-card:hover:not(.elimine) {
+    border-color: var(--neon);
+    box-shadow: 0 0 18px var(--neon-glow);
+}
+
+.suspect-photo {
+    height: 120px;
+    background-size: cover;
+    background-position: center top;
+}
+.suspect-moutarde { background: linear-gradient(160deg, #8b7355 0%, #5a4a30 100%); }
+.suspect-leblanc  { background: linear-gradient(160deg, #9aa8b0 0%, #5a6a78 100%); }
+.suspect-violet   { background: linear-gradient(160deg, #7a5a8a 0%, #4a3a58 100%); }
+.suspect-rose     { background: linear-gradient(160deg, #c08090 0%, #8a5060 100%); }
+
+.suspect-photo::after {
+    content: attr(data-initiale);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    font-family: var(--font-mono);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 0;
+}
+
+.suspect-info {
+    padding: 0.75rem;
+}
+.s-nom {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--blanc-froid);
+    margin-bottom: 0.6rem;
+}
+.s-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+.stat {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+}
+.stat-label { color: var(--texte-dim); }
+.stat-val   { color: var(--texte); }
+
+.suspect-card.elimine {
+    opacity: 0.35;
+    border-color: var(--rouge-sang) !important;
+    box-shadow: 0 0 20px rgba(192,57,43,0.3) !important;
+}
+.suspect-croix {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
+    font-weight: 900;
+    color: var(--rouge-sang);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    text-shadow: 0 0 20px rgba(192,57,43,0.8);
+}
+.suspect-card.elimine .suspect-croix { opacity: 1; }
+
+.btn-accuser {
+    padding: 1rem 2.5rem;
+    background: transparent;
+    border: 2px solid var(--gold);
+    border-radius: 4px;
+    color: var(--gold);
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 0.92rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 0 30px rgba(212,168,67,0.25);
+    animation: pulse-gold 2s ease-in-out infinite;
+    transition: background 0.2s;
+}
+.btn-accuser:hover { background: rgba(212,168,67,0.1); }
+@@keyframes pulse-gold {
+    0%, 100% { box-shadow: 0 0 20px rgba(212,168,67,0.2); }
+    50%       { box-shadow: 0 0 40px rgba(212,168,67,0.45); }
+}
+
+.modal-m {
+    position: fixed; inset: 0;
+    background: rgba(5,10,14,0.93);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 1rem;
+    backdrop-filter: blur(4px);
+}
+.modal-m.hidden { display: none; }
+
+.modal-m-content {
+    position: relative;
+    background: var(--acier);
+    border: 1px solid var(--acier-bord);
+    border-radius: 6px;
+    padding: 2rem;
+    width: min(500px, 94vw);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.7);
+}
+.modal-m-content::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    border-radius: 6px 6px 0 0;
+}
+
+.balance-header { margin-bottom: 1.5rem; }
+.balance-header h2 {
+    margin: 0 0 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+}
+.balance-header p { margin: 0; font-size: 0.85rem; color: var(--texte-dim); line-height: 1.6; }
+
+.balance-visuelle {
+    margin: 1.2rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+}
+.balance-plateau {
+    position: relative;
+    width: 160px; height: 80px;
+    border-bottom: 3px solid var(--gris-metal);
+    border-left: 3px solid var(--gris-metal);
+    border-right: 3px solid var(--gris-metal);
+    border-radius: 0 0 80px 80px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+}
+.balance-aiguille {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 3px;
+    height: 70px;
+    background: linear-gradient(0deg, var(--rouge-ko), var(--gold));
+    transform-origin: bottom center;
+    transform: rotate(-45deg);
+    border-radius: 3px 3px 0 0;
+    transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    margin-left: -1.5px;
+}
+.balance-graduation {
+    display: flex;
+    justify-content: space-between;
+    width: 200px;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--texte-dim);
+}
+
+.balance-input-zone { margin: 1rem 0 1.5rem; }
+.balance-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--gris-metal);
+    margin-bottom: 0.5rem;
+}
+.balance-input-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid var(--acier-bord);
+    border-radius: 3px;
+    padding: 0 0.8rem;
+    transition: border-color 0.2s;
+}
+.balance-input-row:focus-within { border-color: var(--neon); }
+.balance-input {
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: var(--font-mono);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--blanc-froid);
+    width: 80px;
+    padding: 0.6rem 0;
+    text-align: center;
+}
+.balance-unit {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--texte-dim);
+}
+.balance-input::-webkit-inner-spin-button,
+.balance-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+.balance-input[type=number] { -moz-appearance: textfield; }
+
+.btn-confirmer {
+    display: block; width: 100%;
+    padding: 0.85rem;
+    background: transparent;
+    border: 1px solid var(--gold);
+    border-radius: 3px;
+    color: var(--gold);
+    font-family: var(--font-mono);
+    font-size: 0.85rem; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 0 16px rgba(212,168,67,0.15);
+    transition: background 0.2s, box-shadow 0.2s;
+}
+.btn-confirmer:hover { background: rgba(212,168,67,0.08); box-shadow: 0 0 30px rgba(212,168,67,0.3); }
+
+.fin-overlay {
+    position: fixed; inset: 0;
+    background: rgba(3,6,9,0.97);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    backdrop-filter: blur(8px);
+    animation: fadeIn 0.6s ease;
+}
+@@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.fin-content {
+    text-align: center;
+    max-width: 520px;
+    padding: 1rem;
+}
+.fin-icone { font-size: 4rem; margin-bottom: 0.5rem; }
+
+.fin-victoire h1 {
+    font-family: var(--font-mono);
+    font-size: 2rem;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    margin: 0 0 0.5rem;
+    text-shadow: 0 0 30px rgba(212,168,67,0.5);
+}
+.fin-echec h1 {
+    font-family: var(--font-mono);
+    font-size: 1.8rem;
+    letter-spacing: 0.1em;
+    color: var(--rouge-ko);
+    margin: 0 0 0.5rem;
+}
+.fin-sous-titre {
+    font-size: 0.95rem;
+    color: var(--texte-dim);
+    margin: 0 0 1.8rem;
+}
+.fin-indice {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--neon);
+    margin: 0 0 1.5rem;
+    padding: 0.6rem 1rem;
+    border: 1px solid var(--acier-bord);
+    border-radius: 3px;
+    background: rgba(79,195,247,0.05);
+}
+
+.fin-recap {
+    background: rgba(0,0,0,0.4);
+    border: 1px solid var(--acier-bord);
+    border-radius: 6px;
+    padding: 1rem 1.4rem;
+    margin-bottom: 2rem;
+    text-align: left;
+}
+.fin-recap-ligne {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--acier-bord);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+}
+.fin-recap-ligne:last-child { border-bottom: none; }
+.fin-recap-ligne span  { color: var(--texte-dim); }
+.fin-recap-ligne strong{ color: var(--vert-ok); }
+
+.fin-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+.btn-fin {
+    display: inline-block;
+    padding: 0.85rem 2rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    background: transparent;
+    box-shadow: 0 0 20px rgba(212,168,67,0.15);
+}
+.btn-fin:hover { background: rgba(212,168,67,0.1); box-shadow: 0 0 36px rgba(212,168,67,0.3); color: var(--gold); }
+.btn-fin-retry { border-color: var(--neon); color: var(--neon); }
+.btn-fin-retry:hover { background: rgba(79,195,247,0.08); box-shadow: 0 0 24px var(--neon-glow); color: var(--neon); }
+.btn-fin-home  { border-color: var(--gris-metal); color: var(--gris-metal); }
+.btn-fin-home:hover { background: rgba(143,164,178,0.08); color: var(--gris-metal); }
+
+.hidden { display: none !important; }
+
+@@media (max-width: 700px) {
+    .suspects-grille { grid-template-columns: repeat(2, 1fr); }
+}
+@@media (max-width: 400px) {
+    .suspects-grille { grid-template-columns: 1fr 1fr; }
+    .filtres-liste { flex-direction: column; }
+}
+</style>
